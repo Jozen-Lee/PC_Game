@@ -73,7 +73,7 @@ void W25QXX_Write(uint8_t* pBuffer,uint32_t ReadAddr,uint16_t NumByteToRead)
  */
 uint8_t myFLASH::Init(uint16_t type, GPIO_TypeDef *cs_gpiox, uint32_t cs_pinx)
 {
-	
+	uint8_t temp;
 	/* 初始化驱动 */
 	dev.CS_GPIO_PORT = cs_gpiox;
 	dev.CS_GPIO_PIN	 = cs_pinx;
@@ -81,7 +81,21 @@ uint8_t myFLASH::Init(uint16_t type, GPIO_TypeDef *cs_gpiox, uint32_t cs_pinx)
 	
 	/* 获取FLASH的ID */
 	FLASH_ID = ReadID();
-	if(type == FLASH_ID) return 0;
+	if(type == FLASH_ID) 
+	{
+    if(FLASH_ID == W25Q256)
+    {
+			temp= ReadSR(3);  //读取状态寄存器3，判断地址模式
+			if((temp&0X01)==0)			//如果不是4字节地址模式,则进入4字节地址模式
+			{
+				FLASH_CS_LOW(dev.CS_GPIO_PORT, dev.CS_GPIO_PIN);
+				dev.ReadWriteByte(W25X_Enable4ByteAddr);//发送进入4字节地址模式指令   
+				FLASH_CS_HIGH(dev.CS_GPIO_PORT, dev.CS_GPIO_PIN); 
+			}
+    }
+		return 0;
+	}
+	
 	else return 1;
 }
 
@@ -90,16 +104,31 @@ uint8_t myFLASH::Init(uint16_t type, GPIO_TypeDef *cs_gpiox, uint32_t cs_pinx)
  *	@param[in] void
  *  @return byte 数据
  */
- uint8_t myFLASH::ReadSR(void)   
+ uint8_t myFLASH::ReadSR(uint8_t regno)   
 {  
-	uint8_t byte=0;   
+	uint8_t byte=0, command=0; 
+    switch(regno)
+    {
+        case 1:
+            command=W25X_ReadStatusReg1;    //读状态寄存器1指令
+            break;
+        case 2:
+            command=W25X_ReadStatusReg2;    //读状态寄存器2指令
+            break;
+        case 3:
+            command=W25X_ReadStatusReg3;    //读状态寄存器3指令
+            break;
+        default:
+            command=W25X_ReadStatusReg1;    
+            break;
+    }     
 	FLASH_CS_LOW(dev.CS_GPIO_PORT, dev.CS_GPIO_PIN);
 	
 	/* 发送读取状态寄存器命令 */
-	dev.ReadWriteByte(W25X_ReadStatusReg);  
+	dev.ReadWriteByte(command);  
 
 	/* 读取一个字节 */	
-	byte=dev.ReadWriteByte(0Xff);                
+	byte = dev.ReadWriteByte(0Xff);                
   FLASH_CS_HIGH(dev.CS_GPIO_PORT, dev.CS_GPIO_PIN);
 	return byte;   
 } 
@@ -109,12 +138,28 @@ uint8_t myFLASH::Init(uint16_t type, GPIO_TypeDef *cs_gpiox, uint32_t cs_pinx)
  *	@note 只有SPR,TB,BP2,BP1,BP0(bit 7,5,4,3,2)可以写
  *  @return void
  */
-void myFLASH::Write_SR(uint8_t sr)   
+void myFLASH::Write_SR(uint8_t regno, uint8_t sr)   
 {    
+    uint8_t command=0;
+	switch(regno)
+	{
+			case 1:
+					command=W25X_WriteStatusReg1;    //写状态寄存器1指令
+					break;
+			case 2:
+					command=W25X_WriteStatusReg2;    //写状态寄存器2指令
+					break;
+			case 3:
+					command=W25X_WriteStatusReg3;    //写状态寄存器3指令
+					break;
+			default:
+					command=W25X_WriteStatusReg1;    
+					break;
+    }   
 	FLASH_CS_LOW(dev.CS_GPIO_PORT, dev.CS_GPIO_PIN);
 	
 	/* 发送写取状态寄存器命令 */
-	dev.ReadWriteByte(W25X_WriteStatusReg); 
+	dev.ReadWriteByte(command); 
   
 	/* 写入一个字节 */
 	dev.ReadWriteByte(sr);               	
@@ -229,7 +274,7 @@ void myFLASH::Erase_Sector(uint32_t Dst_Addr)
  */
 void myFLASH::Wait_Busy(void)   
 {   
-	while ((ReadSR()&0x01)==0x01);   // 等待BUSY位清空
+	while ((ReadSR(1)&0x01)==0x01);   // 等待BUSY位清空
 } 
 
 /**

@@ -49,8 +49,12 @@ void W25QXX_Write(uint8_t* pBuffer,uint32_t ReadAddr,uint16_t NumByteToRead);
 //ÃüÁî¼¯
 #define W25X_WriteEnable			0x06 
 #define W25X_WriteDisable			0x04 
-#define W25X_ReadStatusReg		0x05 
-#define W25X_WriteStatusReg		0x01 
+#define W25X_ReadStatusReg1		0x05 
+#define W25X_ReadStatusReg2		0x35 
+#define W25X_ReadStatusReg3		0x15 
+#define W25X_WriteStatusReg1  0x01 
+#define W25X_WriteStatusReg2  0x31 
+#define W25X_WriteStatusReg3  0x11 
 #define W25X_ReadData					0x03 
 #define W25X_FastReadData			0x0B 
 #define W25X_FastReadDual			0x3B 
@@ -63,6 +67,8 @@ void W25QXX_Write(uint8_t* pBuffer,uint32_t ReadAddr,uint16_t NumByteToRead);
 #define W25X_DeviceID					0xAB 
 #define W25X_ManufactDeviceID	0x90 
 #define W25X_JedecDeviceID		0x9F 
+#define W25X_Enable4ByteAddr  0xB7
+#define W25X_Exit4ByteAddr    0xE9
 
 /* Private include -----------------------------------------------------------*/
 
@@ -106,9 +112,9 @@ private:
 	flash_dev dev;																																		// FLASHµÄÇý¶¯
 	uint8_t SPI_FLASH_BUF[4096];																											// Ð´ÈëFLASHÊ±ÓÃÓÚÔÝ´æÊý¾Ý
 	uint16_t ReadID(void);  	    																										// ¶ÁÈ¡FLASH ID
-	uint8_t	 ReadSR(void);      					 	 																					// ¶ÁÈ¡×´Ì¬¼Ä´æÆ÷ 
+	uint8_t	 ReadSR(uint8_t regno);     					 	 																	// ¶ÁÈ¡×´Ì¬¼Ä´æÆ÷ 
 	void Wait_Busy(void);           																									// µÈ´ý¿ÕÏÐ
-	void Write_SR(uint8_t sr);  																											// Ð´×´Ì¬¼Ä´æÆ÷
+	void Write_SR(uint8_t regno, uint8_t sr);  																				// Ð´×´Ì¬¼Ä´æÆ÷
 	void Write_Enable(void);  																												// Ð´Ê¹ÄÜ 
 	void Write_Disable(void);																													// Ð´±£»¤
 	void Write_Page(uint8_t* pBuffer,uint32_t WriteAddr,uint16_t NumByteToWrite);			// Ð´ÈëÒ³
