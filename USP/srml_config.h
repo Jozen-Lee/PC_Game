@@ -32,8 +32,8 @@
   */
 
 /* Drivers ----------------------------------------------------*/
-#define USE_SRML_CAN                      1
-#define USE_SRML_FLASH                    1
+#define USE_SRML_CAN                      0
+#define USE_SRML_FLASH                    0
 #define USE_SRML_I2C                      1
 #define USE_SRML_SPI                      0
 #define USE_SRML_TIMER                    1
@@ -43,16 +43,16 @@
 #define USE_SRML_FATFS                    0
 #define USE_SRML_W25Qx                    0
 #define USE_SRML_MPU6050                  0
-#define USE_SRML_DR16                     1
+#define USE_SRML_DR16                     0
 #define USE_SRML_MOTOR_AK80               0
-#define USE_SRML_MOTOR_DJI                1
+#define USE_SRML_MOTOR_DJI                0
 #define USE_SRML_REFEREE                  0
 #define USE_SRML_VSEC                     0
 
 
 /* Middlewares -----------------------------------------------*/
-#define USE_SRML_FILTER                   1
-#define USE_SRML_PID                      1
+#define USE_SRML_FILTER                   0
+#define USE_SRML_PID                      0
 
 #define USE_SRML_CHASSIS                  0
 #define USE_SRML_MOTOR_CTRL               0

@@ -40,20 +40,12 @@
 	
 /***********************上位机调参使用***********************/
 /* 在这里extern需要使用的变量和需要包含的头文件 */
-extern float photo_pitch;
-extern float photo_yaw;
 
-/* 小电脑和云台之间量纲转化系数 */
-extern float K_Pitch;
-extern float K_Yaw;	
-
-#include "Sentry_UpGimbal.h"
-#include "PCvision.h"
 
 /***********************上位机调参使用***********************/
 
 /* Includes ------------------------------------------------------------------*/ 
-#include <UpperMonitor.h>
+#include "UpperMonitor.h"
 /* Private define ------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 uint8_t type = 3;			//0:Pitch, 1:Yaw, 2:Dial, 3:Fric, 4:VisionPitch, 5:VisionYaw, 6:其他数据
@@ -98,182 +90,28 @@ void UpperMonitor_Sent_Choose(float * data)
   for(i=0;i<Sent_Data_Num;i++)
   {
      /* 以下部分用于观察参数曲线 */
-		if(type == 0)
-		{  
-			switch(USART0_Sent_Choose_Data[i])
-			{    
-				case 0: data[i]= PID_Pitch_Angle.Current * (float)100;
-						break;
-				case 1: data[i]= PID_Pitch_Angle.Target * (float)100;
-						break;
-				case 2: data[i]= PID_Pitch_Speed.Current;
-						break;
-				case 3: data[i]= PID_Pitch_Speed.Target;
-						break;
-				case 4: data[i]= PID_Pitch_Speed.Out;
-						break;
-				case 5: data[i]= PID_Pitch_Angle.P_Term;
-						break;
-				case 6: data[i]= PID_Pitch_Angle.I_Term;
-						break;
-				case 7: data[i]= PID_Pitch_Speed.P_Term;
-						break;
-				case 8: data[i]= PID_Pitch_Speed.I_Term;
-					 break;
-				default:break;
-			}
+//		switch(USART0_Sent_Choose_Data[i])
+//		{    
+//			case 0: data[i]= 
+//					break;
+//			case 1: data[i]= 
+//					break;
+//			case 2: data[i]= 
+//					break;
+//			case 3: data[i]= 
+//					break;
+//			case 4: data[i]= 
+//					break;
+//			case 5: data[i]= 
+//					break;
+//			case 6: data[i]= 
+//					break;
+//			case 7: data[i]= 
+//					break;
+//			case 8: data[i]= 
+//				 break;
+//			default:break;
 		}
-		else if(type == 1)
-		{
-			switch(USART0_Sent_Choose_Data[i])
-			{
-				case 0: data[i]= PID_Yaw_Angle.Current * (float)100;
-						break;
-				case 1: data[i]= PID_Yaw_Angle.Target * (float)100;
-						break;
-				case 2: data[i]= PID_Yaw_Speed.Current;
-						break;
-				case 3: data[i]= PID_Yaw_Speed.Target;
-						break;
-				case 4: data[i]= PID_Yaw_Speed.Out;
-						break;
-				case 5: data[i]= PID_Yaw_Angle.P_Term;
-						break;
-				case 6: data[i]= PID_Yaw_Angle.I_Term;
-						break;
-				case 7: data[i]= PID_Yaw_Speed.P_Term;
-						break;
-				case 8: data[i]= PID_Yaw_Speed.I_Term;
-						break;
-				default:break;
-			}
-		}
-		else if(type == 2)
-		{
-			switch(USART0_Sent_Choose_Data[i])
-			{
-				case 0: data[i]= PID_Dial_Speed.Current;
-						break;
-				case 1: data[i]= PID_Dial_Speed.Target;
-						break;
-				case 2: data[i]= PID_Dial_Speed.P_Term;
-						break;
-				case 3: data[i]= PID_Dial_Speed.I_Term;
-						break;
-				case 4: data[i]= PID_Dial_Speed.D_Term;
-						break;
-				case 5: data[i]= PID_Dial_Speed.Out;
-						break;
-				case 6: data[i]= 0;
-						break;
-				case 7: data[i]= 0;
-						break;
-				case 8: data[i]= 0;
-						break;
-				default:break;
-			}
-		}
-		else if(type == 3)
-		{
-			switch(USART0_Sent_Choose_Data[i])
-			{
-				case 0: data[i]= PID_Fric_L_Speed.Current;
-						break;
-				case 1: data[i]= PID_Fric_L_Speed.Target;
-						break;
-				case 2: data[i]= PID_Fric_L_Speed.P_Term;
-						break;
-				case 3: data[i]= PID_Fric_L_Speed.Out;
-						break;
-				case 4: data[i]= PID_Fric_R_Speed.Current;
-						break;
-				case 5: data[i]= PID_Fric_R_Speed.Target;
-						break;
-				case 6: data[i]= PID_Fric_R_Speed.P_Term;
-						break;
-				case 7: data[i]= sentry.chassis_com.RobotStatusPack.BulletSpeed2;
-						break;
-				case 8: data[i]= PID_Fric_R_Speed.Out;
-						break;
-				default:break;
-			}
-		}
-		else if(type == 4)
-		{
-			switch(USART0_Sent_Choose_Data[i])
-			{
-				case 0: data[i]= PID_Pitch_Angle.Current;
-						break;
-				case 1: data[i]= PID_Pitch_Angle.Target;
-						break;
-				case 2: data[i]= photo_pitch;
-						break;
-				case 3: data[i]= vision.data.Data1;
-						break;
-				case 4: data[i]= vision.data.Data2;
-						break;
-				case 5: data[i]= vision.data.Pitch / 100.0;
-						break;
-				case 6: data[i]= 0;
-						break;
-				case 7: data[i]= photo_pitch + vision.data.Pitch / 100.0;
-						break;
-				case 8: data[i]= vision.data.Data1 + vision.data.Data2;
-						break;
-				default:break; 
-			}
-    }
-		else if(type == 5)
-		{
-			switch(USART0_Sent_Choose_Data[i])
-			{
-				case 0: data[i]= PID_Yaw_Angle.Current;
-						break;
-				case 1: data[i]= PID_Yaw_Angle.Target;
-						break;
-				case 2: data[i]= photo_yaw;
-						break;
-				case 3: data[i]= vision.data.Data1;
-						break;
-				case 4: data[i]= vision.data.Data2;
-						break;
-				case 5: data[i]= vision.data.Yaw / 100.0;
-						break;
-				case 6: data[i]= vision.data.Data1 + vision.data.Data2;
-						break;
-				case 7: data[i]= photo_yaw + vision.data.Yaw / 100.0;
-						break;
-				case 8: data[i]= vision.data.Data1 + vision.data.Data2;
-						break;
-				default:break;
-			}
-    }
-		else if(type == 6)
-		{
-			switch(USART0_Sent_Choose_Data[i])
-			{
-				case 0: data[i]= imu.data.pos.yaw;
-						break;
-				case 1: data[i]= sentry.YAW.getAngle();
-						break;
-				case 2: data[i]= imu.data.pos.yaw - sentry.YAW.getAngle();
-						break;
-				case 3: data[i]= imu.data.pos.yaw;
-						break;
-				case 4: data[i]= imu.data.pos.pitch;
-						break;
-				case 5: data[i]= imu.data.pos.roll;
-						break;
-				case 6: data[i]= 0;
-						break;
-				case 7: data[i]= 0;
-						break;
-				case 8: data[i]= 0;
-						break;
-				default:break;
-			}
-    }
-  }
 }
 
 /**
@@ -284,115 +122,24 @@ void UpperMonitor_Sent_Choose(float * data)
 void PARAMETER_MODIFICATION(uint8_t * PARAMETER)
 {
   /* 以下部分用于修改参数内容 */
-	if(type == 0)
+
+	switch(PARAMETER[0])
 	{
-		switch(PARAMETER[0])
-		{
-			case 0x00: type = PARAMETER_Change_float(PARAMETER+1);
-					break;
-			case 0x01: PID_Pitch_Speed.Kp  = PARAMETER_Change_float(PARAMETER+1);
-						break;
-			case 0x02: PID_Pitch_Speed.Ki = PARAMETER_Change_float(PARAMETER+1);
-						break;
-			case 0x03: PID_Pitch_Angle.Kp = PARAMETER_Change_float(PARAMETER+1);
-						break;
-			case 0x04: PID_Pitch_Angle.Kd = PARAMETER_Change_float(PARAMETER+1);
-						break;
-			case 0x05: sentry.Set_Pitch_Angle(PARAMETER_Change_float(PARAMETER+1));
-						break;
-			default:break;
-		}
+//		case 0x00: type = PARAMETER_Change_float(PARAMETER+1);
+//				break;
+//		case 0x01: PID_Pitch_Speed.Kp  = PARAMETER_Change_float(PARAMETER+1);
+//					break;
+//		case 0x02: PID_Pitch_Speed.Ki = PARAMETER_Change_float(PARAMETER+1);
+//					break;
+//		case 0x03: PID_Pitch_Angle.Kp = PARAMETER_Change_float(PARAMETER+1);
+//					break;
+//		case 0x04: PID_Pitch_Angle.Kd = PARAMETER_Change_float(PARAMETER+1);
+//					break;
+//		case 0x05: sentry.Set_Pitch_Angle(PARAMETER_Change_float(PARAMETER+1));
+//					break;
+//		default:break;
 	}
-	else if(type == 1)
-	{
-		switch(PARAMETER[0])
-		{
-		case 0x00: type = PARAMETER_Change_float(PARAMETER+1);
-					break;
-		case 0x01: PID_Yaw_Speed.Kp  = PARAMETER_Change_float(PARAMETER+1);
-					break;
-		case 0x02: PID_Yaw_Speed.Ki = PARAMETER_Change_float(PARAMETER+1);
-					break;
-		case 0x03: PID_Yaw_Angle.Kp = PARAMETER_Change_float(PARAMETER+1);
-					break;
-		case 0x04: PID_Yaw_Angle.Kd = PARAMETER_Change_float(PARAMETER+1);
-					break;
-		case 0x05: sentry.Set_Yaw_Angle(PARAMETER_Change_float(PARAMETER+1));
-					break;
-		default:break;				
-		}				
-	}
-	else if(type == 2)
-	{
-		switch(PARAMETER[0])
-		{
-		case 0x00: type = PARAMETER_Change_float(PARAMETER+1);
-					break;
-		case 0x01: PID_Dial_Speed.Kp  = PARAMETER_Change_float(PARAMETER+1);
-					break;
-		case 0x02: PID_Dial_Speed.Ki = PARAMETER_Change_float(PARAMETER+1);
-					break;
-		case 0x03: PID_Dial_Speed.Kd = PARAMETER_Change_float(PARAMETER+1);
-					break;
-		case 0x04: sentry.gimbal.Set_Motor_Target(DIAL_MOTOR, PARAMETER_Change_float(PARAMETER+1));
-					break;
-		default:break;				
-		}				
-	}
-	else if(type == 3)
-	{
-		switch(PARAMETER[0])
-		{
-		case 0x00: type = PARAMETER_Change_float(PARAMETER+1);
-					break;
-		case 0x01: PID_Fric_L_Speed.Kp  = PARAMETER_Change_float(PARAMETER+1);
-					break;
-		case 0x02: PID_Fric_L_Speed.Ki = PARAMETER_Change_float(PARAMETER+1);
-					break;
-		case 0x03: PID_Fric_R_Speed.Kp = PARAMETER_Change_float(PARAMETER+1);
-					break;
-		case 0x04: PID_Fric_R_Speed.Ki = PARAMETER_Change_float(PARAMETER+1);
-					break;
-		case 0x05: sentry.gimbal.Set_Motor_Target(FRIC_L_MOTOR, PARAMETER_Change_float(PARAMETER+1));
-					break;
-		case 0x06: sentry.gimbal.Set_Motor_Target(FRIC_R_MOTOR, PARAMETER_Change_float(PARAMETER+1));
-					break;
-		default:break;				
-		}				
-	}
-	else if(type == 4)
-	{
-		switch(PARAMETER[0])
-		{
-		case 0x00: type = PARAMETER_Change_float(PARAMETER+1);
-					break;
-		case 0x01: K_Pitch = PARAMETER_Change_float(PARAMETER+1);
-					break;
-		default:break;				
-		}				
-	}
-	else if(type == 5)
-	{
-		switch(PARAMETER[0])
-		{
-		case 0x00: type = PARAMETER_Change_float(PARAMETER+1);
-					break;
-		case 0x01: K_Yaw = PARAMETER_Change_float(PARAMETER+1);
-					break;
-		default:break;				
-		}				
-	}  
-	else if(type == 6)
-	{
-		switch(PARAMETER[0])
-		{
-		case 0x00: type = PARAMETER_Change_float(PARAMETER+1);
-					break;
-		case 0x01: sentry.Set_Pitch_Angle(PARAMETER_Change_float(PARAMETER+1));
-					break;
-		default:break;				
-		}				
-	}  
+	
 	/* 以上部分用于修改参数内容 */
 }
 

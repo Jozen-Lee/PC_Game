@@ -339,7 +339,7 @@
               <MiscControls>--cpp11</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F429xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc; ../Drivers/STM32F4xx_HAL_Driver/Inc; ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy; ../Drivers/CMSIS/Device/ST/STM32F4xx/Include; ../Drivers/CMSIS/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;..\SRML;..\USP\Application;..\USP\Drivers;..\USP\Middlewares\UpperMonitor;..\USP;..\USP\Drivers\Devices\LCD;..\USP\Drivers\Devices\PS2;..\USP\Drivers\Devices\FLASH;..\USP\Drivers\Devices\24CXX;..\USP\Drivers\Components\IIC;..\USP\Drivers\Components\SPI;..\USP\Drivers\Components\DELAY</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -392,6 +392,75 @@
         </Group>
         <Group>
           <GroupName>Application/User/Core</GroupName>
+          <GroupOption>
+            <CommonProperty>
+              <UseCPPCompiler>0</UseCPPCompiler>
+              <RVCTCodeConst>0</RVCTCodeConst>
+              <RVCTZI>0</RVCTZI>
+              <RVCTOtherData>0</RVCTOtherData>
+              <ModuleSelection>0</ModuleSelection>
+              <IncludeInBuild>2</IncludeInBuild>
+              <AlwaysBuild>2</AlwaysBuild>
+              <GenerateAssemblyFile>2</GenerateAssemblyFile>
+              <AssembleAssemblyFile>2</AssembleAssemblyFile>
+              <PublicsOnly>2</PublicsOnly>
+              <StopOnExitCode>11</StopOnExitCode>
+              <CustomArgument></CustomArgument>
+              <IncludeLibraryModules></IncludeLibraryModules>
+              <ComprImg>1</ComprImg>
+            </CommonProperty>
+            <GroupArmAds>
+              <Cads>
+                <interw>2</interw>
+                <Optim>0</Optim>
+                <oTime>2</oTime>
+                <SplitLS>2</SplitLS>
+                <OneElfS>2</OneElfS>
+                <Strict>2</Strict>
+                <EnumInt>2</EnumInt>
+                <PlainCh>2</PlainCh>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <wLevel>0</wLevel>
+                <uThumb>2</uThumb>
+                <uSurpInc>2</uSurpInc>
+                <uC99>2</uC99>
+                <uGnu>2</uGnu>
+                <useXO>2</useXO>
+                <v6Lang>0</v6Lang>
+                <v6LangP>0</v6LangP>
+                <vShortEn>2</vShortEn>
+                <vShortWch>2</vShortWch>
+                <v6Lto>2</v6Lto>
+                <v6WtE>2</v6WtE>
+                <v6Rtti>2</v6Rtti>
+                <VariousControls>
+                  <MiscControls>--c99</MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Cads>
+              <Aads>
+                <interw>2</interw>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <thumb>2</thumb>
+                <SplitLS>2</SplitLS>
+                <SwStkChk>2</SwStkChk>
+                <NoWarn>2</NoWarn>
+                <uSurpInc>2</uSurpInc>
+                <useXO>2</useXO>
+                <ClangAsOpt>0</ClangAsOpt>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Aads>
+            </GroupArmAds>
+          </GroupOption>
           <Files>
             <File>
               <FileName>main.c</FileName>
@@ -414,9 +483,14 @@
               <FilePath>../Core/Src/dma.c</FilePath>
             </File>
             <File>
-              <FileName>fmc.c</FileName>
+              <FileName>spi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>../Core/Src/fmc.c</FilePath>
+              <FilePath>../Core/Src/spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Core/Src/tim.c</FilePath>
             </File>
             <File>
               <FileName>usart.c</FileName>
@@ -442,6 +516,38 @@
         </Group>
         <Group>
           <GroupName>Application/User/System</GroupName>
+          <Files>
+            <File>
+              <FileName>Service_Communication.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\USP\Application\Service_Communication.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Service_Debug.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\USP\Application\Service_Debug.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Service_Devices.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\USP\Application\Service_Devices.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>System_Config.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\USP\Application\System_Config.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>System_DataPool.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\USP\Application\System_DataPool.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>srml_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\USP\srml_config.h</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>Middlewares/FreeRTOS</GroupName>
@@ -568,7 +674,59 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Midddlewares/Gmae</GroupName>
+          <GroupName>Middlewares/UpperMonitor</GroupName>
+          <Files>
+            <File>
+              <FileName>UpperMonitor.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\USP\Middlewares\UpperMonitor\UpperMonitor.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares/Gmae/Snake</GroupName>
+          <Files>
+            <File>
+              <FileName>gluttonous_snake.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\USP\Middlewares\Game\Gluttonous_Snake\gluttonous_snake.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>gs_object.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\USP\Middlewares\Game\Gluttonous_Snake\gs_object.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares/Gmae/Tetris</GroupName>
+          <Files>
+            <File>
+              <FileName>game_map.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USP\Middlewares\Game\Tetris\game_map.c</FilePath>
+            </File>
+            <File>
+              <FileName>object.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USP\Middlewares\Game\Tetris\object.c</FilePath>
+            </File>
+            <File>
+              <FileName>process.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USP\Middlewares\Game\Tetris\process.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares/LCD/Text</GroupName>
+          <Files>
+            <File>
+              <FileName>text.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USP\Drivers\Devices\LCD\text.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>Drivers/STM32F4xx_HAL_Driver</GroupName>
@@ -647,6 +805,11 @@
               <FileName>stm32f4xx_hal_sram.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sram.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_hal_tim.c</FileName>
@@ -746,9 +909,63 @@
               </Aads>
             </GroupArmAds>
           </GroupOption>
+          <Files>
+            <File>
+              <FileName>drv_timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SRML\Drivers\Components\drv_timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SRML\Drivers\Components\drv_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>tutu_driver_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USP\Drivers\Components\SPI\tutu_driver_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>tutu_drv_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USP\Drivers\Components\IIC\tutu_drv_i2c.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>Drivers/Devices</GroupName>
+          <Files>
+            <File>
+              <FileName>flash.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\USP\Drivers\Devices\FLASH\flash.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ps2.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\USP\Drivers\Devices\PS2\ps2.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>24cxx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USP\Drivers\Devices\24CXX\24cxx.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Drivers/Devices/LCD</GroupName>
+          <Files>
+            <File>
+              <FileName>touch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USP\Drivers\Devices\LCD\touch.c</FilePath>
+            </File>
+            <File>
+              <FileName>lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USP\Drivers\Devices\LCD\lcd.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>::CMSIS</GroupName>
