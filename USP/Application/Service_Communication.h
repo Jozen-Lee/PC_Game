@@ -19,8 +19,9 @@ extern TaskHandle_t UsartRxPort_Handle;
 extern TaskHandle_t UsartTxPort_Handle;
 
 /*------------------------------Function prototypes ---------------------------*/
+uint32_t User_UART1_RxCpltCallback(uint8_t* Recv_Data, uint16_t ReceiveLen);
 uint32_t User_UART2_RxCpltCallback(uint8_t* Recv_Data, uint16_t ReceiveLen);
-uint32_t User_UART3_RxCpltCallback(uint8_t* Recv_Data, uint16_t ReceiveLen);
+
 	
 void Service_Communication_Init(void);
 	

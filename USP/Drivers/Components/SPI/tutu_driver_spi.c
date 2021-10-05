@@ -1,6 +1,6 @@
 #include "tutu_driver_spi.h"
 
-//SPI��д����
+//SPI读写函数
 uint8_t SPI_ReadWriteByte(uint8_t TxData)
 {
 	uint8_t RxData;

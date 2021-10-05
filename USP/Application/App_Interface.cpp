@@ -16,20 +16,19 @@
   *
  */
 /* Includes ------------------------------------------------------------------*/
+#include "App_Interface.h"
 #include "Service_Devices.h"
-#include "ps2.h"
+#include "App_Drawing.h"
 /* Private define ------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-TaskHandle_t DevicePS2_Handle;
-TaskHandle_t DeviceTouch_Handle;
+TaskHandle_t StartIF_Handle;
+TaskHandle_t GamesIF_Handle;
 
 /* Private function declarations ---------------------------------------------*/
-void Device_PS2(void *arg);
-void Device_Touch(void *arg);
+void IF_Start(void *arg);
+void IF_Games(void *arg);
 
-// ¥•∆¡»ŒŒÒµƒ∫Ø ˝÷∏’Î 0 Œﬁ ˝æ› 1-4 ”––ß ˝◊÷
-uint8_t (*touch_func)(void);
 /* Exported devices ----------------------------------------------------------*/
 /* Motor & ESC & Other actuators*/
 /* Remote control */
@@ -40,62 +39,52 @@ uint8_t (*touch_func)(void);
 
 /* Function prototypes -------------------------------------------------------*/
 /**
-* @brief  Initialization of device management service
+* @brief  Initialization of interface
 * @param  None.
 * @return None.
 */
-void Service_Devices_Init(void)
+void App_Interface_Init(void)
 {
-	xTaskCreate(Device_PS2,							"Dev.PS2", 						Small_Stack_Size,     NULL, PriorityHigh, 			 &DevicePS2_Handle);
-	xTaskCreate(Device_Touch,						"Dev.Touch", 					Small_Stack_Size,     NULL, PriorityHigh, 			 &DeviceTouch_Handle);
+	xTaskCreate(IF_Start,				"IF.Start", 				Small_Stack_Size,     NULL, PriorityHigh, 			 &StartIF_Handle);
+	xTaskCreate(IF_Games,				"IF.Games", 				Small_Stack_Size,     NULL, PriorityHigh, 			 &GamesIF_Handle);
 }
 
 
 /**
- *@brief PS2»ŒŒÒ
+ *@brief ÂºÄÂßãÁïåÈù¢‰ªªÂä°
  */ 
-void Device_PS2(void *arg)
+void IF_Start(void *arg)
 {
   /* Cache for Task */
-  TickType_t xLastWakeTime_t = xTaskGetTickCount();
-	TickType_t _xTicksToWait = pdMS_TO_TICKS(20);
+	Start_IF_Interface();
   /* Pre-Load for task */
-  uint8_t dir;
   /* Infinite loop */
   for(;;)
   {
-		/* ∏¸–¬PS2 ˝æ›  */
-		ps2.UpdateData();
-		if(ps2.GetKeyData(KEY_PAD_UP) == PS2_PRESS)  		{ dir = DIR_UP; 	xQueueSend(Action_Port, &dir, 0);}
-		if(ps2.GetKeyData(KEY_PAD_DOWN) == PS2_PRESS)  	{ dir = DIR_DOWN; xQueueSend(Action_Port, &dir, 0);}
-		if(ps2.GetKeyData(KEY_PAD_LEFT) == PS2_PRESS)  	{ dir = DIR_LEFT; xQueueSend(Action_Port, &dir, 0);}
-		if(ps2.GetKeyData(KEY_PAD_RIGHT) == PS2_PRESS)  { dir = DIR_DOWN; xQueueSend(Action_Port, &dir, 0);}
-		
-		vTaskDelayUntil(&xLastWakeTime_t, _xTicksToWait);	
+		vTaskDelay(50);
 	}
 }
 
 /**
- *@brief ¥•∆¡ºÏ≤‚»ŒŒÒ
+ *@brief ÂºÄÂßãÁïåÈù¢ÁöÑËß¶Êë∏Â±èÊ£ÄÊµãÂáΩÊï∞
  */ 
-void Device_Touch(void *arg)
+uint8_t StartIF_TouchTask(void)
+{
+	
+}
+
+/**
+ *@brief Ê∏∏ÊàèÈÄâÊã©ÁïåÈù¢‰ªªÂä°
+ */ 
+void IF_Games(void *arg)
 {
   /* Cache for Task */
-  TickType_t xLastWakeTime_t = xTaskGetTickCount();
-	TickType_t _xTicksToWait = pdMS_TO_TICKS(20);
+
   /* Pre-Load for task */
-	uint8_t Res = 0;
   /* Infinite loop */
   for(;;)
   {
-		/* ºÏ≤‚¥•√˛∆¡◊¥Ã¨  */
-		if(touch_func != NULL) 
-		{
-			Res = touch_func();
-			if(Res) xQueueSend(Action_Port, &Res, 0);
-		}
-		
-		vTaskDelayUntil(&xLastWakeTime_t, _xTicksToWait);	
+		vTaskDelay(50);
 	}
 }
 

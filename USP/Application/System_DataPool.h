@@ -43,6 +43,7 @@ extern UART_HandleTypeDef huart2;
 /* Queues */
 extern QueueHandle_t  USART_RxPort;
 extern QueueHandle_t  USART_TxPort;
+extern QueueHandle_t	Action_Port;
 
 /* Mutexes */
 /* Notifications */
@@ -52,6 +53,11 @@ extern QueueHandle_t  USART_TxPort;
 
 extern uint8_t Uart1_Rx_Buff[USART1_RX_BUFFER_SIZE];
 extern uint8_t Uart2_Rx_Buff[USART2_RX_BUFFER_SIZE];
+
+#define DIR_UP 		1
+#define DIR_DOWN 	2 
+#define DIR_RIGHT 3
+#define DIR_LEFT	4
 
 
 #endif

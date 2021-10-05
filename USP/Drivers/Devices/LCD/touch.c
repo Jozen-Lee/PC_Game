@@ -3,14 +3,7 @@
 #include "stdlib.h"
 #include "math.h"
 #include "24cxx.h" 
-
-void delay_us(uint32_t nus)
-{
-	for(int i = 0; i < 180; i ++)
-	{
-		for(int j = 0; j < nus; j ++);
-	}
-}
+#include "delay.h"
 
 _m_tp_dev tp_dev=
 {

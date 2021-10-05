@@ -1,10 +1,53 @@
+/**
+  ******************************************************************************
+  * Copyright (c) 2021 - ~, TuTu Studio
+  * @file    ps2.cpp
+  * @author  LJY 2250017028@qq.com
+  * @brief   Code for .
+  * @date    2021-10-05
+  * @version 1.0
+  * @par Change Log:
+  * <table>
+  * <tr><th>Date        <th>Version  <th>Author     <th>Description
+  * <tr><td>2021-09-04  <td> 1.0     <td>TuTu  			<td>Creator
+  * </table>
+  *
+  ==============================================================================
+                              How to use this driver  
+  ==============================================================================
+    @note
+      -# 初始化
+		 	
+      -# 用法,
+				1. 轮询调用
+					ps2.UpdateData();
+				2. 读取遥控器数据
+				
+					// 按键数据:参数为PS2_KEY_t类型值
+					ps2.GetKeyData(KEY_START);
+					
+					// 摇杆数据:参数为PS2_ROD_t类型值
+					ps2.GetRodData(ROD_RX);
+	  
+  ******************************************************************************
+  * @attention
+  * 
+  * if you had modified this file, please make sure your code does not have many 
+  * bugs, update the version Number, write dowm your name and the date, the most
+  * important is make sure the users will have clear and definite understanding 
+  * through your new brief.
+  *
+  * <h2><center>&copy; Copyright (c) 2021 - ~,TuTu Studio.
+  * All rights reserved.</center></h2>
+  ******************************************************************************
+  */
+
+/* Includes ------------------------------------------------------------------*/
 #include "ps2.h"
 #include "Drivers/Components/drv_timer.h"
+/* Private define ------------------------------------------------------------*/
 
-uint16_t Handkey;
-uint8_t Comd[2]={0x01,0x42};	//开始命令。请求数据（主机发送到手柄）
-uint8_t Data[9]={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}; //数据存储数组
-
+/* Private variables ---------------------------------------------------------*/
 uint16_t MASK[]={
     PSB_SELECT, 
     PSB_L3,      
@@ -24,12 +67,106 @@ uint16_t MASK[]={
     PSB_PINK   //粉  
 	};
 
+PS2 ps2;
+/* Private type --------------------------------------------------------------*/
+/* Private function declarations ---------------------------------------------*/
+/* Private function prototypes -----------------------------------------------*/
 	
-void PS2_Cmd(uint8_t CMD)		  
+/**
+	*@brief 初始化
+*/
+void PS2::Init(void)
+{ 
+	ShortPoll(); 
+	ShortPoll(); 
+	ShortPoll(); 
+	
+	// 进入配置模式
+	EnterConfing(); 		
+	
+	// “红绿灯”配置模式，并选择是否保存 
+	TurnOnAnalogMode(); 
+	
+	// 开启震动模式
+	VibrationMode(); 	
+
+	// 完成并保存配置	
+	ExitConfing(); 			
+} 
+
+/**
+	*@brief 获取某个按键数据
+ */ 
+PS2_States_t PS2::GetKeyData(PS2_KEY_t key)
 {
-	volatile uint16_t ref=0x01;  //ref=00000001
+	//按键
+	uint8_t index = key - 1;  
+
+	//这是16个按键,按下为0,未按下为1
+	Handkey=(Data[4]<<8)|Data[3];     
+	if((Handkey&(1 <<(MASK[index]-1)))==0)
+	{
+		return PS2_PRESS;
+	}
+	else return PS2_LOOSE;          
+}
+
+/**
+	*@brief 得到某个摇杆数据
+	*@note 范围0~256
+ */ 	 
+uint8_t PS2::GetRodData(PS2_ROD_t rod)
+{
+	return Data[rod];                 
+}
+
+/**
+	*@brief 更新手柄数据
+ */ 
+void PS2::UpdateData(void)
+{
+	volatile uint8_t byte=0;
+	volatile uint16_t ref=0x01;
+	
+	//清除数据
+	ClearData();
+	
+	//选中器件
+	CS_L;
+	
+	//开始命令
+	Cmd(Comd[0]);
+	
+	//请求数据  
+	Cmd(Comd[1]);  
+
+	//开始接受数据
+	for(byte=2;byte<9;byte++)          
+	{
+		for(ref=0x01;ref<0x100;ref<<=1)
+		{
+			CLK_H;
+			CLK_L;
+			delay_us_nos(10);
+			CLK_H;
+		  if(DI) Data[byte] = ref|Data[byte];
+		}
+    delay_us_nos(10);
+	}
+	CS_H;	
+}
+
+/**
+	*@brief 发送指令
+ */ 
+void PS2::Cmd(uint8_t CMD)		  
+{
+	//ref=00000001
+	volatile uint16_t ref=0x01;  
 	Data[1] = 0;   
-	for(ref=0x01;ref<0x0100;ref<<=1) // 00000001——>10000000
+	
+	// 00000001——>10000000
+	for(ref=0x01;ref<0x0100;ref<<=1) 
 	{
 		if(ref&CMD)    
 		{              
@@ -47,196 +184,127 @@ void PS2_Cmd(uint8_t CMD)
 	}
 }
 	
-
-
-
-
-	//判断是否为红灯模式
-//返回值；0，红灯模式
-uint8_t PS2_RedLight(void)
+/**
+	*@brief 判断是否为红灯模式
+	*@return 0 红灯模式 1 正常模式
+ */ 
+uint8_t PS2::RedLight(void)
 {
 	CS_L;   
-	PS2_Cmd(Comd[0]);  //开始命令
-	PS2_Cmd(Comd[1]);  //请求数据
+	Cmd(Comd[0]);  //开始命令
+	Cmd(Comd[1]);  //请求数据
 	CS_H;   
-	if( Data[1] == 0X73)   return 0 ;//返回0位红灯模式
+	if( Data[1] == 0X73) return 0;
 	else return 1;
 
 }
 
-
-
-
-
-//读取手柄数据
-void PS2_ReadData(void)
-{
-	volatile uint8_t byte=0;
-	volatile uint16_t ref=0x01;
-
-	CS_L;
-
-	PS2_Cmd(Comd[0]);  //开始命令
-	PS2_Cmd(Comd[1]);  //请求数据
-
-	for(byte=2;byte<9;byte++)          //开始接受数据
-	{
-		
-		for(ref=0x01;ref<0x100;ref<<=1)
-		{
-			CLK_H;
-			CLK_L;
-			delay_us_nos(10);
-			CLK_H;
-		      if(DI)
-		      Data[byte] = ref|Data[byte];
-		}
-        delay_us_nos(10);
-	}
-	
-	CS_H;	
-}
-
-
-
-uint8_t PS2_DataKey()
-{
-	uint8_t index;  //按键记录值（最终返回值）
-
-	PS2_ClearData();//清除数组数据
-	PS2_ReadData(); //将数据读取到
-
-	Handkey=(Data[4]<<8)|Data[3];     //这是16个按键  按下为0， 未按下为1
-	for(index=0;index<16;index++)
-	{	    
-		if((Handkey&(1<<(MASK[index]-1)))==0)
-		return index+1;
-	}
-	return 0;          //没有任何按键按下
-}
-
-
-
-//得到一个摇杆的模拟量	 范围0~256
-uint8_t PS2_AnologData(uint8_t button)
-{
-	return Data[button];                 
-}
-
-
-
-
-//清除数据缓冲区
-void PS2_ClearData()
+/**
+	*@brief 清除数据缓冲区
+ */ 	 
+void PS2::ClearData()
 {
 	uint8_t a;
 	for(a=0;a<9;a++)
 		Data[a]=0x00;
 }
 
-void PS2_ShortPoll(void) //手柄配置初始化
+/**
+	*@brief 手柄配置初始化
+ */ 	
+void PS2::ShortPoll(void) 
 {
 	CS_L; delay_us_nos(16); 
-  PS2_Cmd(0x01);
-	PS2_Cmd(0x42);
-  PS2_Cmd(0X00);
-	PS2_Cmd(0x00);   //小电机不震动
-  PS2_Cmd(0x00);  //大电机不震动
+  Cmd(0x01);
+	Cmd(0x42);
+  Cmd(0X00);
+	Cmd(0x00);   
+  Cmd(0x00); 
 	CS_H;
   delay_us_nos(16); 
 }
 
-void PS2_EnterConfing(void) //进入配置
-	{ 
-		CS_L;
-		delay_us_nos(16);
-		PS2_Cmd(0x01);
-		PS2_Cmd(0x43);
-		PS2_Cmd(0X00);
-		PS2_Cmd(0x01); 
-		PS2_Cmd(0x00); 
-		PS2_Cmd(0X00);
-		PS2_Cmd(0X00); 
-		PS2_Cmd(0X00);
-		PS2_Cmd(0X00);
-		CS_H;
-		delay_us_nos(16);
+/**
+	*@brief 进入配置
+ */ 	
+void PS2::EnterConfing(void) 
+{ 
+	CS_L;
+	delay_us_nos(16);
+	Cmd(0x01);
+	Cmd(0x43);
+	Cmd(0X00);
+	Cmd(0x01); 
+	Cmd(0x00); 
+	Cmd(0X00);
+	Cmd(0X00); 
+	Cmd(0X00);
+	Cmd(0X00);
+	CS_H;
+	delay_us_nos(16);
 } 
 
-
-// 发送模式设置
-void PS2_TurnOnAnalogMode(void)
-	{ 
-		CS_L; 
-		PS2_Cmd(0x01);
-		PS2_Cmd(0x44);
-		PS2_Cmd(0X00); 
-		PS2_Cmd(0x01);//0x01红灯  0x00绿灯模式
-		PS2_Cmd(0xEE);//Ox03 锁存设置，即不可通过按键“MODE ”设置模式。 
-		              //0xEE 不锁存软件设置，可通过按键“MODE ”设置模式。
-		PS2_Cmd(0X00); 
-	  PS2_Cmd(0X00);
-  	PS2_Cmd(0X00); 
-	  PS2_Cmd(0X00); 
-	  CS_H;
-	  delay_us_nos(16); 
-	} 
-
-	// 振动设置
-	void PS2_VibrationMode(void)
- { 
-  CS_L; 
-  delay_us_nos(16); 
-  PS2_Cmd(0x01);
-  PS2_Cmd(0x4D);
-  PS2_Cmd(0X00);
-  PS2_Cmd(0x00);
-  PS2_Cmd(0X01);
-  CS_H;
-  delay_us_nos(16);
- } 
+/**
+	*@brief 发送模式设置
+ */
+void PS2::TurnOnAnalogMode(void)
+{ 
+	CS_L; 
+	Cmd(0x01);
+	Cmd(0x44);
+	Cmd(0X00); 
 	
-	void PS2_ExitConfing(void)// 完成并保存配置
+	//0x01红灯  0x00绿灯模式
+	Cmd(0x01);
+	
+	//Ox03 锁存设置，即不可通过按键“MODE ”设置模式。
+	//0xEE 不锁存软件设置，可通过按键“MODE ”设置模式。
+	Cmd(0xEE); 
+								
+	Cmd(0X00); 
+	Cmd(0X00);
+	Cmd(0X00); 
+	Cmd(0X00); 
+	CS_H;
+	delay_us_nos(16); 
+} 
+
+/**
+	*@brief 振动设置
+ */
+void PS2::VibrationMode(void)
+{ 
+	CS_L; 
+	delay_us_nos(16); 
+	Cmd(0x01);
+	Cmd(0x4D);
+	Cmd(0X00);
+	Cmd(0x00);
+	Cmd(0X01);
+	CS_H;
+	delay_us_nos(16);
+} 
+	
+/**
+	*@brief 完成并保存配置
+ */
+void PS2::ExitConfing(void)
 {
   CS_L; 
 	delay_us_nos(16);
-	PS2_Cmd(0x01); 
-	PS2_Cmd(0x43); 
-	PS2_Cmd(0X00);
-	PS2_Cmd(0x00);
-	PS2_Cmd(0x5A);
-	PS2_Cmd(0x5A);
-	PS2_Cmd(0x5A);
-	PS2_Cmd(0x5A); 
-	PS2_Cmd(0x5A);
+	Cmd(0x01); 
+	Cmd(0x43); 
+	Cmd(0X00);
+	Cmd(0x00);
+	Cmd(0x5A);
+	Cmd(0x5A);
+	Cmd(0x5A);
+	Cmd(0x5A); 
+	Cmd(0x5A);
 	CS_H; 
 	delay_us_nos(16);
 }
 	
-void PS2_SetInit(void)
-	{ 
-		PS2_ShortPoll(); 
-		PS2_ShortPoll(); 
-		PS2_ShortPoll(); 
-		PS2_EnterConfing(); // 进入配置模式
-		PS2_TurnOnAnalogMode(); // “红绿灯”配置模式，并选择是否保存 
-		PS2_VibrationMode(); // 开启震动模式 
-		PS2_ExitConfing(); // 完成并保存配置
-	} 
-	
-	
-void PS2_Vibration(uint8_t motor1,uint8_t motor2)
-	{
-    CS_L; 
-		delay_us_nos(16); 
-		PS2_Cmd(0x01); // 开始命令 
-		PS2_Cmd(0x42); // 请求数据 
-		PS2_Cmd(0X00); 
-		PS2_Cmd(motor1); 
-		PS2_Cmd(motor2); 
-		PS2_Cmd(0X00); 
-		PS2_Cmd(0X00); 
-		PS2_Cmd(0X00); 
-		PS2_Cmd(0X00); 
-		CS_H; delay_us_nos(16);
-} 
+
+
+							/************************ COPYRIGHT(C) TuTu Studio **************************/

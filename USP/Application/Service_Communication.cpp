@@ -20,10 +20,6 @@
 /* Private define ------------------------------------------------------------*/
 void Task_UsartRecieve(void *arg);
 void Task_UsartTransmit(void *arg);
-void Task_CAN1Transmit(void *arg);
-void Task_CAN2Transmit(void *arg);
-void Task_CAN1Receive(void *arg);
-void Task_CAN2Receive(void *arg);
 
 /**
 * @brief  Initialization of communication service
@@ -32,7 +28,6 @@ void Task_CAN2Receive(void *arg);
 */
 void Service_Communication_Init(void)
 {
-
   xTaskCreate(Task_UsartRecieve,	"Com.Usart RxPort" , 	Small_Stack_Size,    		NULL, PriorityHigh,   			&UsartRxPort_Handle);
   xTaskCreate(Task_UsartTransmit,	"Com.Usart TxPort" , 	Small_Stack_Size,    		NULL, PriorityHigh,   			&UsartTxPort_Handle);
 }
@@ -62,8 +57,9 @@ void Task_UsartRecieve(void *arg)
     {
 			switch(Usart_RxCOB.port_num)
 			{
-				case 2: break;
-				case 3: break;
+				case 1: xQueueSend(Action_Port, Usart_RxCOB.address, 0);
+					break;
+				default: break;
 			}
     }
   }
@@ -77,10 +73,10 @@ void Task_UsartTransmit(void *arg)
 	
   /* Infinite loop */
   TickType_t xLastWakeTime_t = xTaskGetTickCount();
-	TickType_t _xTicksToWait = pdMS_TO_TICKS(1);
+	TickType_t _xTicksToWait = pdMS_TO_TICKS(50);
   for(;;)
   {
-		
+		vTaskDelayUntil(&xLastWakeTime_t, _xTicksToWait);
   }	
 }
 

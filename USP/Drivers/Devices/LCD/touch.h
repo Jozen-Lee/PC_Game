@@ -73,6 +73,10 @@ typedef struct
 
 extern _m_tp_dev tp_dev;	 	//触屏控制器在touch.c里面定义  
    
+#ifdef  __cplusplus
+extern "C"{
+#endif
+	
 //电阻屏函数
 void TP_Write_Byte(uint8_t num);						//向控制芯片写入一个数据
 uint16_t TP_Read_AD(uint8_t CMD);							//读取AD转换值
@@ -88,7 +92,11 @@ void TP_Adj_Info_Show(uint16_t x0,uint16_t y0,uint16_t x1,uint16_t y1,uint16_t x
 //电阻屏/电容屏 共用函数
 uint8_t TP_Scan(uint8_t tp);								//扫描
 uint8_t TP_Init(void);								//初始化
- 
+	
+#ifdef __cplusplus
+}
+#endif	
+
 #endif
 
 

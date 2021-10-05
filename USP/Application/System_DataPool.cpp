@@ -11,8 +11,9 @@
 
 /* RTOS Resources ------------------------------------------------------------*/
 /* Queues */
-QueueHandle_t  USART_RxPort;
-QueueHandle_t  USART_TxPort;
+QueueHandle_t USART_RxPort;
+QueueHandle_t USART_TxPort;
+QueueHandle_t	Action_Port;
 
 /* Semaphores */
 /* Mutexes */

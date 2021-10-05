@@ -29,12 +29,22 @@
 #include "Service_Debug.h"
 #include "Service_Communication.h"
 
+/* Application */
+#include "App_Interface.h"
+#include "App_Game.h"
+#include "App_Drawing.h"
+
 /* User support package & SRML */
 #include <SRML.h>
+#include "text.h"
+#include "lcd.h"
+#include "touch.h"
+#include "flash.h"
+#include "ps2.h"
 
 /* Private variables ---------------------------------------------------------*/
-uint8_t mpu_set_offset = 0;
-long offset_data[3];
+uint8_t trans[5] = {1, 2, 3, 4, 5};
+uint8_t rev[80];
 /*Founctions------------------------------------------------------------------*/
 /**
 * @brief Load drivers ,modules, and data resources for tasks.
@@ -43,18 +53,31 @@ long offset_data[3];
 void System_Resource_Init(void)
 {
   /* Drivers Init ---------------------*/
-  Timer_Init(&htim4, USE_HAL_DELAY);
+//  Timer_Init(&htim4, USE_HAL_DELAY);
+//	Uart_Init(&huart1, Uart1_Rx_Buff, USART1_RX_BUFFER_SIZE, User_UART1_RxCpltCallback);
   
   /* RTOS resources Init --------------*/
-  USART_RxPort    = xQueueCreate(4,sizeof(USART_COB));
-  USART_TxPort    = xQueueCreate(4,sizeof(USART_COB));
+//  USART_RxPort    = xQueueCreate(4,sizeof(USART_COB));
+//  USART_TxPort    = xQueueCreate(4,sizeof(USART_COB));
+//	Action_Port 		= xQueueCreate(4,1);
 	
   /* Other resources Init -------------*/
+//	__HAL_SPI_ENABLE(&hspi5);
+//	SPI_ReadWriteByte(0XFF); 
+	// 外部FLASH
+	flash.Init(W25Q256, FLASH_CS_GPIO_Port, FLASH_CS_Pin);
+	flash.Read(rev, 30639489, 80);
+	// PS2
+//	ps2.Init();
 	
-  /* Modules Init ---------------------*/
-
+	
+	// LCD相关的初始化
+	Text_Init();
+	LCD_Init();
+//	TP_Init();
+	Start_IF_Interface();
   /* Service configurations -----------*/
-	System_Tasks_Init();
+//	System_Tasks_Init();
 }  
 
 /**
@@ -64,11 +87,19 @@ void System_Resource_Init(void)
 void System_Tasks_Init(void)
 { 
   /* Syetem Service init --------------*/
-  Service_Debug_Init();
-  Service_Devices_Init();
-  Service_Communication_Init();
-	
-  /* Applications Init ----------------*/
+//  Service_Debug_Init();
+//  Service_Devices_Init();
+//  Service_Communication_Init();
+//	
+//  /* Applications Init ----------------*/
+	App_Interface_Init();
+//	App_Games_Init();
+//	
+//	// 任务全部挂起
+//	vTaskSuspendAll();
+//	
+//	// 开启第一个任务
+//	vTaskResume(StartIF_Handle);
 }
 
 

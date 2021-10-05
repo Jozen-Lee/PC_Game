@@ -117,7 +117,10 @@ typedef struct
 #define SSD_HPS	(SSD_HOR_BACK_PORCH)
 #define SSD_VT 	(SSD_VER_RESOLUTION+SSD_VER_BACK_PORCH+SSD_VER_FRONT_PORCH)
 #define SSD_VPS (SSD_VER_BACK_PORCH)
-   															  
+
+#ifdef __cplusplus
+ extern "C" {
+#endif
 void LCD_Init(void);													   	//初始化
 void LCD_DisplayOn(void);													//开显示
 void LCD_DisplayOff(void);													//关显示
@@ -144,7 +147,9 @@ void LCD_SSD_BackLightSet(uint8_t pwm);							//SSD1963 背光控制
 void LCD_Scan_Dir(uint8_t dir);									//设置屏扫描方向
 void LCD_Display_Dir(uint8_t dir);								//设置屏幕显示方向
 void LCD_Set_Window(uint16_t sx,uint16_t sy,uint16_t width,uint16_t height);	//设置窗口	
-
+#ifdef __cplusplus
+}
+#endif	
 
 #endif  
 	 

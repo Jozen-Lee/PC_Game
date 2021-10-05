@@ -7,17 +7,18 @@
   *  - Before running your devices, just do what you want ~ !
   *  - More devices or using other classification is decided by yourself ~ !
  */
-#ifndef  _SERVICE_DEVICES_H_
-#define  _SERVICE_DEVICES_H_
+#ifndef  _APP_INTERFACE_H_
+#define  _APP_INTERFACE_H_
 /* Includes ------------------------------------------------------------------*/
 #include "System_DataPool.h"
 
 /* Private macros ------------------------------------------------------------*/
 /* Private type --------------------------------------------------------------*/
 /* Exported macros -----------------------------------------------------------*/
-extern uint8_t (*touch_func)(void);
 /* Exported types ------------------------------------------------------------*/
 /* Exported variables --------------------------------------------------------*/
+extern TaskHandle_t StartIF_Handle;
+extern TaskHandle_t GamesIF_Handle;
 #ifdef  __cplusplus
 
 #endif
@@ -27,7 +28,7 @@ extern "C"{
 #endif
 
 /* Exported function declarations --------------------------------------------*/
-void Service_Devices_Init(void);
+void App_Interface_Init(void);
   
 #ifdef  __cplusplus
 }

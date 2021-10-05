@@ -209,7 +209,11 @@ void myFLASH::Erase_Sector(uint32_t Dst_Addr)
 	/* 发送扇区擦除指令 */
 	dev.ReadWriteByte(W25X_SectorErase);  
 
-	/* 发送24bit地址 */
+	/* 发送地址 */
+	if(FLASH_ID==W25Q256)//如果是W25Q256的话地址为4字节的，要发送最高8位
+	{
+		dev.ReadWriteByte((uint8_t)((Dst_Addr)>>24));
+	}
 	dev.ReadWriteByte((uint8_t)((Dst_Addr)>>16));     
 	dev.ReadWriteByte((uint8_t)((Dst_Addr)>>8));   
 	dev.ReadWriteByte((uint8_t)Dst_Addr);  
@@ -276,7 +280,11 @@ void myFLASH::Read(uint8_t* pBuffer,uint32_t ReadAddr,uint16_t NumByteToRead)
 	/* 发送读取命令 */
 	dev.ReadWriteByte(W25X_ReadData);   
 
-	/* 发送24bit地址 */
+	/* 发送地址 */
+	if(FLASH_ID==W25Q256)//如果是W25Q256的话地址为4字节的，要发送最高8位
+	{
+		dev.ReadWriteByte((uint8_t)((ReadAddr)>>24));
+	}
 	dev.ReadWriteByte((uint8_t)((ReadAddr)>>16));     
 	dev.ReadWriteByte((uint8_t)((ReadAddr)>>8));   
 	dev.ReadWriteByte((uint8_t)ReadAddr);   
@@ -382,9 +390,13 @@ void myFLASH::Write_Page(uint8_t* pBuffer,uint32_t WriteAddr,uint16_t NumByteToW
 	FLASH_CS_LOW(dev.CS_GPIO_PORT, dev.CS_GPIO_PIN); 
 		
 	/* 发送写入页的指令 */
-	SPI_ReadWriteByte(W25X_PageProgram);    
-
-	/* 发送24bit地址 */
+	SPI_ReadWriteByte(W25X_PageProgram); 
+	
+	/* 发送地址 */
+	if(FLASH_ID==W25Q256)//如果是W25Q256的话地址为4字节的，要发送最高8位
+	{
+		dev.ReadWriteByte((uint8_t)((WriteAddr)>>24));
+	}
 	SPI_ReadWriteByte((uint8_t)((WriteAddr)>>16));    
 	SPI_ReadWriteByte((uint8_t)((WriteAddr)>>8));   
 	SPI_ReadWriteByte((uint8_t)WriteAddr);   

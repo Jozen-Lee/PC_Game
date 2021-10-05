@@ -1,4 +1,3 @@
-#include "lcd.h"
 #include "text.h"	
 #include "string.h"												    
 #include "usart.h"	
