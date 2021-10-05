@@ -41,10 +41,9 @@ void Start_IF_Interface(void)
 	 
 	LCD_Clear(BLACK);
 	POINT_COLOR=RED;
-	Show_Str(30,200,200,32,"煜个头头",32,0);
 	Show_Str(120-48,100,200,24,(uint8_t*)"游戏说明",24,1);
 	POINT_COLOR=WHITE;
-	Show_Str(10,250,80,16,(uint8_t*)"制作:阿巴阿巴组",16,1);
+	Show_Str(10,250,160,16,(uint8_t*)"制作:阿巴阿巴组",16,1);
 	Show_Str(10,267,40,16,(uint8_t*)"成员:",16,1);
 	Show_Str(50,267,200,16,(uint8_t*)"罗文凯",16,1);
 	Show_Str(50,284,200,16,(uint8_t*)"刘洁耿",16,1);

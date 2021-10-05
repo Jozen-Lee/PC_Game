@@ -53,31 +53,27 @@ uint8_t rev[80];
 void System_Resource_Init(void)
 {
   /* Drivers Init ---------------------*/
-//  Timer_Init(&htim4, USE_HAL_DELAY);
-//	Uart_Init(&huart1, Uart1_Rx_Buff, USART1_RX_BUFFER_SIZE, User_UART1_RxCpltCallback);
+  Timer_Init(&htim4, USE_HAL_DELAY);
+	Uart_Init(&huart1, Uart1_Rx_Buff, USART1_RX_BUFFER_SIZE, User_UART1_RxCpltCallback);
   
   /* RTOS resources Init --------------*/
-//  USART_RxPort    = xQueueCreate(4,sizeof(USART_COB));
-//  USART_TxPort    = xQueueCreate(4,sizeof(USART_COB));
-//	Action_Port 		= xQueueCreate(4,1);
+  USART_RxPort    = xQueueCreate(4,sizeof(USART_COB));
+  USART_TxPort    = xQueueCreate(4,sizeof(USART_COB));
+	Action_Port 		= xQueueCreate(4,1);
 	
   /* Other resources Init -------------*/
-//	__HAL_SPI_ENABLE(&hspi5);
-//	SPI_ReadWriteByte(0XFF); 
 	// 外部FLASH
 	flash.Init(W25Q256, FLASH_CS_GPIO_Port, FLASH_CS_Pin);
-	flash.Read(rev, 30639489, 80);
+
 	// PS2
-//	ps2.Init();
-	
+	ps2.Init();
 	
 	// LCD相关的初始化
 	Text_Init();
 	LCD_Init();
-//	TP_Init();
-	Start_IF_Interface();
+	TP_Init();
   /* Service configurations -----------*/
-//	System_Tasks_Init();
+	System_Tasks_Init();
 }  
 
 /**
