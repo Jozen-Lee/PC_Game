@@ -46,7 +46,7 @@ uint8_t (*touch_func)(void);
 */
 void Service_Devices_Init(void)
 {
-	xTaskCreate(Device_PS2,							"Dev.PS2", 						Small_Stack_Size,     NULL, PriorityHigh, 			 &DevicePS2_Handle);
+//	xTaskCreate(Device_PS2,							"Dev.PS2", 						Small_Stack_Size,     NULL, PriorityHigh, 			 &DevicePS2_Handle);
 	xTaskCreate(Device_Touch,						"Dev.Touch", 					Small_Stack_Size,     NULL, PriorityHigh, 			 &DeviceTouch_Handle);
 }
 

@@ -2064,7 +2064,43 @@ void LCD_ShowString(uint16_t x,uint16_t y,uint16_t width,uint16_t height,uint8_t
     }  
 }
 
-
+/**
+ *@brief 在指定位置绘制图片
+ *@param x0 y0 x1 y1 图片起止点
+ *@param front_color 图像颜色
+ *@param back_color 背景颜色
+ *@param	p 图片存储地址
+ */ 
+void LCD_Draw_Picture(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, int front_color, int back_color, const unsigned char* p)
+{
+ char temp, t;
+ unsigned int j=0;
+ unsigned char x,y;
+  
+  if((y1-y0)%8!=0) y1 =(y1-y0)/8 + 1; 
+	else y1 = y1 / 8;
+	for(y=0;y<y1;y++)
+	{
+    for(x=x0;x<x1;x++)
+	    {      
+	    	temp = p[j++]; 
+				for(t=0;t<8;t++)
+				{
+					if(temp&0x01)
+					{
+						POINT_COLOR = front_color;
+						LCD_DrawPoint(x,y*8+y0+t);
+					}
+					else 
+					{
+						POINT_COLOR = back_color;
+						LCD_DrawPoint(x,y*8+y0+t);
+					}
+					temp>>=1;					
+				}
+	    }
+	}
+}
 
 
 

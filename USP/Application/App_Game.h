@@ -17,6 +17,9 @@
 /* Exported macros -----------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
 /* Exported variables --------------------------------------------------------*/
+extern TaskHandle_t SnakeGame_Handle;
+extern TaskHandle_t TetrisGame_Handle;
+
 #ifdef  __cplusplus
 
 #endif

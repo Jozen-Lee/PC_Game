@@ -339,7 +339,7 @@
               <MiscControls>--cpp11</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F429xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;  ../Drivers/STM32F4xx_HAL_Driver/Inc;  ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;  ../Drivers/CMSIS/Device/ST/STM32F4xx/Include;  ../Drivers/CMSIS/Include;  ../Middlewares/Third_Party/FreeRTOS/Source/include;  ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;  ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;  ..\SRML;  ..\USP\Application;  ..\USP\Drivers;  ..\USP\Middlewares\UpperMonitor;  ..\USP;  ..\USP\Drivers\Devices\LCD;  ..\USP\Drivers\Devices\PS2;  ..\USP\Drivers\Devices\FLASH;  ..\USP\Drivers\Devices\24CXX;  ..\USP\Drivers\Components\IIC;  ..\USP\Drivers\Components\SPI;  ..\USP\Drivers\Components\DELAY</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;..\SRML;..\USP;..\USP\Application;..\USP\Drivers;..\USP\Middlewares\UpperMonitor;..\USP\Middlewares\Game\Gluttonous_Snake;..\USP\Middlewares\Game\Tetris;..\USP\Drivers\Devices\LCD;..\USP\Drivers\Devices\OLED;..\USP\Drivers\Devices\PS2;..\USP\Drivers\Devices\FLASH;..\USP\Drivers\Devices\24CXX;..\USP\Drivers\Components\IIC;..\USP\Drivers\Components\SPI;..\USP\Drivers\Components\DELAY</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1097,6 +1097,11 @@
               <FileName>ps2.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\USP\Drivers\Devices\PS2\ps2.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>oled.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USP\Drivers\Devices\OLED\oled.c</FilePath>
             </File>
           </Files>
         </Group>

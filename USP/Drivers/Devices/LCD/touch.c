@@ -275,33 +275,7 @@ uint8_t TP_Get_Adjdata(void)
 //返回值:0,没有进行校准
 //       1,进行过校准
 uint8_t TP_Init(void)
-{	
-  GPIO_InitTypeDef GPIO_Initure;
-  
-	__HAL_RCC_GPIOH_CLK_ENABLE();			//开启GPIOH时钟
-	__HAL_RCC_GPIOI_CLK_ENABLE();			//开启GPIOI时钟
-	__HAL_RCC_GPIOG_CLK_ENABLE();			//开启GPIOG时钟
-			
-	//PH6
-	GPIO_Initure.Pin=GPIO_PIN_6;            //PH6
-	GPIO_Initure.Mode=GPIO_MODE_OUTPUT_PP;  //推挽输出
-	GPIO_Initure.Pull=GPIO_PULLUP;          //上拉
-	GPIO_Initure.Speed=GPIO_SPEED_HIGH;     //高速
-	HAL_GPIO_Init(GPIOH,&GPIO_Initure);     //初始化
-			
-	//PI3,8
-	GPIO_Initure.Pin=GPIO_PIN_3|GPIO_PIN_8; //PI3,8
-	HAL_GPIO_Init(GPIOI,&GPIO_Initure);     //初始化
-			
-	//PH7
-	GPIO_Initure.Pin=GPIO_PIN_7;            //PH7
-	GPIO_Initure.Mode=GPIO_MODE_INPUT;      //输入
-	HAL_GPIO_Init(GPIOH,&GPIO_Initure);     //初始化
-			
-	//PG3
-	GPIO_Initure.Pin=GPIO_PIN_3;            //PG3
-	HAL_GPIO_Init(GPIOG,&GPIO_Initure);     //初始化
-			
+{			
 	//第一次读取初始化
 	TP_Read_XY(&tp_dev.x[0],&tp_dev.y[0]);
 	

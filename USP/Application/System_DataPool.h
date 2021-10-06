@@ -58,7 +58,8 @@ extern uint8_t Uart2_Rx_Buff[USART2_RX_BUFFER_SIZE];
 #define DIR_DOWN 	2 
 #define DIR_RIGHT 3
 #define DIR_LEFT	4
-
+#define GAME_OVER 5
+#define GAME_CONTINUE 6
 
 #endif
 /************************ COPYRIGHT(C) SCUT-ROBOTLAB **************************/

@@ -200,7 +200,7 @@ void GS_Object::Snake_Init(void)
 	// 蛇信息初始化
 	snake.node=3;
 	snake.size=3;
-	snake.speed=1;
+	snake.speed=0;
 	snake.snake_x[0]=48;snake.snake_x[1]=snake.snake_x[0]-snake.size;snake.snake_x[2]=snake.snake_x[0]-2*snake.size;
 	snake.snake_y[0]=48;snake.snake_y[1]=snake.snake_y[0];snake.snake_y[2]=snake.snake_x[0]-2*snake.size;
 	snake.direction=RIGHT;
@@ -219,7 +219,6 @@ void GS_Object::Snake_Init(void)
  */ 
 uint8_t GS_Object::EatFood_Check(void)
 {
-	static uint16_t time_speed = 1499;
 	uint8_t i;
 	uint16_t check_x;
 	uint16_t check_y;
@@ -244,11 +243,7 @@ uint8_t GS_Object::EatFood_Check(void)
 				if(snake.speed < 5 && current_score >= target_score)  
 				{
 					target_score += 5;
-					snake.speed ++;
-//				  TIM_Cmd(TIM2,DISABLE);
-//					time_speed-=251;
-//					TIM2_Init(time_speed,7199);
-//					TIM_Cmd(TIM2,ENABLE);
+					if(snake.speed < 4) snake.speed ++;
 				}
 				return 1;
 			}
@@ -305,9 +300,6 @@ uint8_t GS_Object::GameOver_Check(void)
 	//触发游戏结束
 	if(EatSelf_Check()||TouchWall_Check())
 	{
-//		TIM_Cmd(TIM2,DISABLE);//关闭定时器,防止出错
-//		TIM_Cmd(TIM3,DISABLE);
-//	  Show_Str(66,76,48,48,(uint8_t*)"游戏结束",24,0);
 	  return 1;
 	}
 	else return 0;

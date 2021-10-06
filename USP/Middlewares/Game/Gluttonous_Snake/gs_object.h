@@ -92,11 +92,12 @@ public:
 	uint16_t Get_Target_Score(void){return target_score;}
 	food_dev& Get_Food(void){return food;}
 	snake_dev& Get_Snake(void){return snake;}
+	uint16_t GetLevel(void){return speed_val[snake.speed];}
 private:
-	//定义食物结构变量
+	// 定义食物结构变量
 	food_dev food;		
 
-	//定义蛇身结构变量
+	// 定义蛇身结构变量
 	snake_dev snake;	
 
 	// 当前得分
@@ -104,6 +105,9 @@ private:
 
 	// 下一关所需分数
 	uint16_t target_score;
+
+	// 游戏难度等级
+	uint16_t speed_val[5] = {400, 300, 200, 100, 50};
 };
 
 /* Exported variables --------------------------------------------------------*/

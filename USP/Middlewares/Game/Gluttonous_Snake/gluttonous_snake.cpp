@@ -169,44 +169,6 @@ void Gluttonous_Snake::Map_Init(void)
 }
 
 /**
- *@brief 开始信息
- */ 
-void Gluttonous_Snake::Beginning_Information(void)
-{
-	READJ:
-	LCD_Clear(BLACK);
-	POINT_COLOR=RED;
-	Show_Str(120-48,50,200,24,(uint8_t*)"开始游戏",24,1);
-	Show_Str(120-48,100,200,24,(uint8_t*)"游戏说明",24,1);
-	POINT_COLOR=WHITE;
-	Show_Str(10,250,80,16,(uint8_t*)"制作:阿巴阿巴组",16,1);
-	Show_Str(10,267,40,16,(uint8_t*)"成员:",16,1);
-	Show_Str(50,267,200,16,(uint8_t*)"罗文凯",16,1);
-	Show_Str(50,284,200,16,(uint8_t*)"刘洁耿",16,1);
-	Show_Str(50,301,200,16,(uint8_t*)"李爵煜",16,1);
-		while(1)
-	{
-					tp_dev.scan(0); 
-			if(tp_dev.sta&TP_PRES_DOWN)
-			{
-		     if(tp_dev.x[0]>(120-48)&&tp_dev.x[0]<(120+48)&&tp_dev.y[0]>(50-0)&&tp_dev.y[0]<(50+24))
-				 {
-					 break;
-				 }
-				 if(tp_dev.x[0]>(120-48)&&tp_dev.x[0]<(120+48)&&tp_dev.y[0]>(100-0)&&tp_dev.y[0]<(100+24))
-				 {
-					 LCD_Clear(WHITE);
-					 HAL_Delay(500);
-					 Game_Introduction();
-					 goto READJ;
-				 }
-				 
-			}
-			HAL_Delay(20);
-	}
-}
-
-/**
  *@brief 游戏说明
  */ 
 void Gluttonous_Snake::Game_Introduction(void)
@@ -228,27 +190,23 @@ void Gluttonous_Snake::Game_Introduction(void)
 	
 	
 	Show_Str(20,180,200,24,(uint8_t*)"关于速度:",24,0);
-	Show_Str(20,210,200,48,(uint8_t*)"小蛇的成绩每次高于通关分数,速度会加1,速度最大值为100",16,0);
+	Show_Str(20,210,200,48,(uint8_t*)"小蛇的成绩每次高于通关分数,速度会加1,速度最大值为5",16,0);
 	
 	POINT_COLOR=BLACK;
   LCD_DrawRectangle(120-30,280-30,120+30,280);	
 	POINT_COLOR=RED;
-	Show_Str(120-24,280-24,48,24,(uint8_t*)"返回",24,0);
-	
-	while(1)
-	{
-		// 扫描触屏按键
-		tp_dev.scan(0); 
-		if(tp_dev.sta&TP_PRES_DOWN)
-		{
-			 if(tp_dev.x[0]>(120-30)&&tp_dev.x[0]<(120+30)&&tp_dev.y[0]>(280-15)&&tp_dev.y[0]<(280+15))
-			 {
-				 Map_Init();
-				 break;
-			 }
-		 }
-		HAL_Delay(20);
-	 }
+	Show_Str_Mid(0,280-24,(uint8_t*)"GoGoGo!",24,240);
+}
+
+/**
+ *@brief 游戏结束界面
+ */ 
+void Gluttonous_Snake::GameOver_Inf(void)
+{
+	LCD_Clear(BLACK);
+	POINT_COLOR=WHITE;
+	Show_Str_Mid(0,80,(uint8_t*)"重新开始",24,240);	
+	Show_Str_Mid(0,200,(uint8_t*)"返回",24,240);	
 }
 
 /**
@@ -287,22 +245,16 @@ void Gluttonous_Snake::Beginning_Vedio(void)
   HAL_Delay(1000);
 }
 
-
 /**
  *@brief 游戏初始化
  */ 
 void Gluttonous_Snake::Game_Init(void)
 {
-	// 打印开始信息
-	Beginning_Information();
-	
 	// 加载动画
 	Beginning_Vedio();
 	
 	// 界面初始化
 	Map_Init();
-//	TIM3_Init(899,7199); //每100ms检测一次食物
-//	TIM2_Init(1499,7199); //速度决定定时器加载值
 }
 
 	/************************ COPYRIGHT(C) TuTu Studio **************************/

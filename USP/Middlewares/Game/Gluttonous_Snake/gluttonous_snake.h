@@ -35,7 +35,6 @@
 #include "gs_object.h"
 
 /* Private define ------------------------------------------------------------*/
-									
 /* Private include -----------------------------------------------------------*/
 
 /* Private macros ------------------------------------------------------------*/
@@ -47,18 +46,32 @@
 class Gluttonous_Snake
 {
 public:
+	void Game_Introduction(void);
+	void GameOver_Inf(void);
+	void Game_Init(void);
+	uint16_t Get_SnakeSpeed(void){return object.GetLevel();}
+	void Snake_Sport(void)
+	{
+		object.Snake_Sport();
+	}
+	void Food_Update(void)
+	{
+		object.EatFood_Check();
+		object.Food_Appear();
+		Grade_Print();		
+	}
+	uint8_t Game_Over(void){return object.GameOver_Check();}
+	
+	// 游戏对象
+	GS_Object object;
+private:
 	void Game_Map(void);
 	void Font_Print(void);
 	void Grade_Print(void);
 	void Map_Init(void);
-	void Game_Introduction(void);
-	void Beginning_Information(void);
-	void Beginning_Vedio(void);
-	void Game_Init(void);
-private:
 	
-	// 游戏对象
-	GS_Object object;
+	void Beginning_Vedio(void);
+
 };
 
 /* Exported variables --------------------------------------------------------*/

@@ -23,8 +23,8 @@
 #ifdef __cplusplus
  extern "C" {
 #endif
-void Start_IF_Interface(void);
-	 
+void Start_Interface(void);
+void GamesChoose_Interface(void); 
 #ifdef __cplusplus
 }
 #endif	

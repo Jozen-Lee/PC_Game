@@ -38,6 +38,7 @@
 #include <SRML.h>
 #include "text.h"
 #include "lcd.h"
+#include "oled.h"
 #include "touch.h"
 #include "flash.h"
 #include "ps2.h"
@@ -62,16 +63,23 @@ void System_Resource_Init(void)
 	Action_Port 		= xQueueCreate(4,1);
 	
   /* Other resources Init -------------*/
+	// 字库初始化
+	Text_Init();
+	
 	// 外部FLASH
 	flash.Init(W25Q256, FLASH_CS_GPIO_Port, FLASH_CS_Pin);
 
 	// PS2
 	ps2.Init();
 	
-	// LCD相关的初始化
-	Text_Init();
+	// OLED
+	OLED_Init();
+	
+	// LCD
 	LCD_Init();
 	TP_Init();
+	
+	// 
   /* Service configurations -----------*/
 	System_Tasks_Init();
 }  
@@ -84,18 +92,15 @@ void System_Tasks_Init(void)
 { 
   /* Syetem Service init --------------*/
 //  Service_Debug_Init();
-//  Service_Devices_Init();
+  Service_Devices_Init();
 //  Service_Communication_Init();
 //	
 //  /* Applications Init ----------------*/
 	App_Interface_Init();
-//	App_Games_Init();
-//	
-//	// 任务全部挂起
-//	vTaskSuspendAll();
-//	
-//	// 开启第一个任务
-//	vTaskResume(StartIF_Handle);
+	App_Games_Init();
+	
+	// 开启第一个任务
+	vTaskResume(StartIF_Handle);
 }
 
 
