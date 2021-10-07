@@ -67,6 +67,8 @@ void Error_Handler(void);
 #define AT24C02_SCL_GPIO_Port GPIOH
 #define AT24C02_SDA_Pin GPIO_PIN_5
 #define AT24C02_SDA_GPIO_Port GPIOH
+#define PS2_DAT_Pin GPIO_PIN_4
+#define PS2_DAT_GPIO_Port GPIOC
 #define TOUCH_CLK_Pin GPIO_PIN_6
 #define TOUCH_CLK_GPIO_Port GPIOH
 #define TOUCH_PEN_Pin GPIO_PIN_7
@@ -83,6 +85,12 @@ void Error_Handler(void);
 #define OLED_DATA5_GPIO_Port GPIOC
 #define OLED_DATA6_Pin GPIO_PIN_9
 #define OLED_DATA6_GPIO_Port GPIOC
+#define PS2_CMD_Pin GPIO_PIN_13
+#define PS2_CMD_GPIO_Port GPIOH
+#define PS2_CS_Pin GPIO_PIN_15
+#define PS2_CS_GPIO_Port GPIOH
+#define PS2_CLK_Pin GPIO_PIN_1
+#define PS2_CLK_GPIO_Port GPIOI
 #define TOUCH_MOSI_Pin GPIO_PIN_3
 #define TOUCH_MOSI_GPIO_Port GPIOI
 #define OLED_RST_Pin GPIO_PIN_15

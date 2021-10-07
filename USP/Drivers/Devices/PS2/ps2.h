@@ -31,23 +31,23 @@
 #ifdef __cplusplus
 
 /* Includes ------------------------------------------------------------------*/  
-#include "stm32f4xx_hal.h"
+#include "main.h"
 
 /* Private define ------------------------------------------------------------*/
 
 /*
-	PB12-->DI
-	PB13-->DO
-	PB14-->CS
-	PB15-->CLK
+	PG14-->DI
+	PA1-->DO
+	PC4-->CS
+	PH13-->CLK
 */
-#define DI    HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_12) 
-#define DO_H  HAL_GPIO_WritePin(GPIOB,GPIO_PIN_13,GPIO_PIN_SET)     
-#define DO_L  HAL_GPIO_WritePin(GPIOB,GPIO_PIN_13,GPIO_PIN_RESET)     
-#define CS_H  HAL_GPIO_WritePin(GPIOB,GPIO_PIN_14,GPIO_PIN_SET)      
-#define CS_L  HAL_GPIO_WritePin(GPIOB,GPIO_PIN_14,GPIO_PIN_RESET)     
-#define CLK_H  HAL_GPIO_WritePin(GPIOB,GPIO_PIN_15,GPIO_PIN_SET)   
-#define CLK_L  HAL_GPIO_WritePin(GPIOB,GPIO_PIN_15,GPIO_PIN_RESET)     
+#define DI    HAL_GPIO_ReadPin(PS2_DAT_GPIO_Port,PS2_DAT_Pin) 
+#define DO_H  HAL_GPIO_WritePin(PS2_CMD_GPIO_Port,PS2_CMD_Pin,GPIO_PIN_SET)     
+#define DO_L  HAL_GPIO_WritePin(PS2_CMD_GPIO_Port,PS2_CMD_Pin,GPIO_PIN_RESET)     
+#define CS_H  HAL_GPIO_WritePin(PS2_CS_GPIO_Port,PS2_CS_Pin,GPIO_PIN_SET)      
+#define CS_L  HAL_GPIO_WritePin(PS2_CS_GPIO_Port,PS2_CS_Pin,GPIO_PIN_RESET)     
+#define CLK_H  HAL_GPIO_WritePin(PS2_CLK_GPIO_Port,PS2_CLK_Pin,GPIO_PIN_SET)   
+#define CLK_L  HAL_GPIO_WritePin(PS2_CLK_GPIO_Port,PS2_CLK_Pin,GPIO_PIN_RESET)     
 
 /*È«²¿×´Ì¬*/
 #define PSB_SELECT     	1

@@ -208,8 +208,36 @@ void OLED_ShowString(uint8_t x,uint8_t y,const uint8_t *p,uint8_t size)
         x+=size/2;
         p++;
     }  
-	
 }	
+
+//在指定位置显示一张图片
+//x:0~128
+//y:0~64
+//mode:0,反白显示;1,正常显示				 
+//size:选择字体 16/12 
+void OLED_Draw_Picture(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t mode, unsigned const char p[])
+{
+	char temp, t;
+ unsigned int j=0;
+ unsigned char x,y;
+  
+  if((y1-y0)%8!=0) y1 =(y1-y0)/8 + 1; 
+	else y1 = y1 / 8;
+	for(y=0;y<y1;y++)
+	{
+    for(x=x0;x<x1;x++)
+	    {      
+	    	temp = p[j++]; 
+				for(t=0;t<8;t++)
+				{
+					if(temp&0x01)OLED_DrawPoint(x,y*8+y0+t,mode);
+					else OLED_DrawPoint(x,y*8+y0+t,!mode);
+					temp>>=1;					
+				}
+	    }
+	}
+}
+
 //初始化SSD1306					    
 void OLED_Init(void)
 { 	 		 

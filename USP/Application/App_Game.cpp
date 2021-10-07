@@ -17,6 +17,7 @@
  */
 /* Includes ------------------------------------------------------------------*/
 #include "App_Game.h"
+#include "App_Drawing.h"
 #include "App_Interface.h"
 #include "Service_Devices.h"
 #include "gluttonous_snake.h"
@@ -32,6 +33,7 @@ TaskHandle_t SnakeGame_Handle;
 TaskHandle_t SnakeFood_Handle;
 TaskHandle_t SnakeSport_Handle;
 TaskHandle_t SnakeOver_Handle;
+TaskHandle_t SnakeCtrl_Handle;
 
 //俄罗斯方块
 TaskHandle_t TetrisGame_Handle;
@@ -42,6 +44,8 @@ void Game_Snake(void *arg);
 void Snake_Food(void *arg);
 void Snake_Sport(void *arg);
 void Snake_Over(void *arg);
+void Snake_Ctrl(void *arg);
+
 void Game_Tetris(void *arg);
 //void Device_Touch(void *arg);
 
@@ -66,6 +70,8 @@ void App_Games_Init(void)
 	xTaskCreate(Snake_Food,							"Snake.Food", 					Small_Stack_Size,     NULL, PriorityHigh, 			 &SnakeFood_Handle);
 	xTaskCreate(Snake_Sport,						"Snake.Sport", 					Small_Stack_Size,     NULL, PriorityHigh, 			 &SnakeSport_Handle);
 	xTaskCreate(Snake_Over,							"Snake.Over", 					Small_Stack_Size,     NULL, PriorityHigh, 			 &SnakeOver_Handle);	
+	xTaskCreate(Snake_Ctrl,							"Snake.Ctrl", 					Small_Stack_Size,     NULL, PriorityHigh, 			 &SnakeCtrl_Handle);
+	
 	// 俄罗斯方块
 	xTaskCreate(Game_Tetris,						"Game.Tetris", 					Small_Stack_Size,     NULL, PriorityHigh, 			 &TetrisGame_Handle);
 	
@@ -74,7 +80,31 @@ void App_Games_Init(void)
 	vTaskSuspend(SnakeFood_Handle); 
 	vTaskSuspend(SnakeSport_Handle);
 	vTaskSuspend(SnakeOver_Handle);
+	vTaskSuspend(SnakeCtrl_Handle);
 	vTaskSuspend(TetrisGame_Handle);
+}
+
+/* ----------------------------------------------- 贪吃蛇 -------------------------------------------------------------------------*/
+/**
+ *@brief 贪吃蛇控制任务
+ */ 
+void Snake_Ctrl(void *arg)
+{
+  /* Cache for Task */
+  /* Pre-Load for task */
+	uint8_t cmd;
+  /* Infinite loop */
+  for(;;)
+  {
+		if(xQueueReceive(Ctrl_Port,&cmd,portMAX_DELAY) == pdPASS)
+		{
+			if(cmd == DIR_UP || cmd == DIR_DOWN || cmd == DIR_LEFT || cmd == DIR_RIGHT)		
+			{
+				snake.object.Get_Snake().direction = cmd;
+			}
+			OLED_DrawingArrow(cmd);
+		}
+	}	
 }
 
 /**
@@ -100,24 +130,29 @@ uint8_t Snake_ID_Touch(void)
  */ 
 uint8_t Snake_Processing_Touch(void)
 { 
-	tp_dev.scan(0); 		 
+	tp_dev.scan(0); 
+	uint8_t cmd;
 	if(tp_dev.sta&TP_PRES_DOWN)			//触摸屏被按下
 	{	
 		if(tp_dev.x[0]>(90-25)&&tp_dev.x[0]<(90+25)&&tp_dev.y[0]>(230-25)&&tp_dev.y[0]<(230+25))
 		{	
-			snake.object.Get_Snake().direction = UP;		
+			cmd = DIR_UP;
+			xQueueSend(Ctrl_Port, &cmd, 0);
 		} 
 		if(tp_dev.x[0]>(90-25)&&tp_dev.x[0]<(90+25)&&tp_dev.y[0]>(290-25)&&tp_dev.y[0]<(290+25))
 		{	
-			snake.object.Get_Snake().direction=DOWN;		
+			cmd = DIR_DOWN;
+			xQueueSend(Ctrl_Port, &cmd, 0);	
 		}
 		if(tp_dev.x[0]>(40-25)&&tp_dev.x[0]<(40+25)&&tp_dev.y[0]>(260-25)&&tp_dev.y[0]<(260+25))
 		{	
-			snake.object.Get_Snake().direction=LEFT;		
+			cmd = DIR_LEFT;
+			xQueueSend(Ctrl_Port, &cmd, 0);			
 		} 
 		if(tp_dev.x[0]>(140-25)&&tp_dev.x[0]<(140+25)&&tp_dev.y[0]>(260-25)&&tp_dev.y[0]<(260+25))
 		{	
-			snake.object.Get_Snake().direction=RIGHT;		
+			cmd = DIR_RIGHT;
+			xQueueSend(Ctrl_Port, &cmd, 0);			
 		}  			
 	}
 	return 0;
@@ -173,6 +208,7 @@ void Game_Snake(void *arg)
 		vTaskResume(SnakeFood_Handle);
 		vTaskResume(SnakeSport_Handle);
 		vTaskResume(SnakeOver_Handle);
+		vTaskResume(SnakeCtrl_Handle);
 		
 		if(xQueueReceive(Action_Port,&res,portMAX_DELAY) == pdPASS)
 		{
@@ -180,6 +216,7 @@ void Game_Snake(void *arg)
 			{
 				vTaskSuspend(SnakeFood_Handle);
 				vTaskSuspend(SnakeSport_Handle);
+				vTaskSuspend(SnakeCtrl_Handle);
 				vTaskSuspend(NULL);
 			}
 		}
@@ -210,13 +247,13 @@ void Snake_Sport(void *arg)
 {
   /* Cache for Task */
   /* Pre-Load for task */
-
+	TickType_t _xTicksToWait;
   /* Infinite loop */
   for(;;)
   {
-		TickType_t _xTicksToWait = snake.Get_SnakeSpeed();
+		_xTicksToWait = snake.Get_SnakeSpeed();
 		snake.Snake_Sport();
-		vTaskDelay(200);
+		vTaskDelay(_xTicksToWait);
 	}	
 }
 
@@ -248,7 +285,7 @@ void Snake_Over(void *arg)
 			{
 				touch_func = NULL;
 				if(over == 1) vTaskResume(SnakeGame_Handle);
-				else if(over == 2) vTaskResume(GamesIF_Handle);
+				else if(over == 2) vTaskResume(StartIF_Handle);
 				vTaskSuspend(NULL);
 			}
 		}

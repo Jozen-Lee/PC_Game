@@ -19,12 +19,14 @@
 
 #ifndef __APP_DRAWING_H_
 #define __APP_DRAWING_H_
+#include "stm32f4xx.h"
 
 #ifdef __cplusplus
  extern "C" {
 #endif
 void Start_Interface(void);
 void GamesChoose_Interface(void); 
+void OLED_DrawingArrow(uint8_t cmd);
 #ifdef __cplusplus
 }
 #endif	

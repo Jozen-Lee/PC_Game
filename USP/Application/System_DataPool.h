@@ -18,6 +18,7 @@
 #include <semphr.h>
 #include <stm32f4xx.h>
 #include <SRML.h>
+#include "gs_object.h"
 
 /* Macro Definitions ---------------------------------------------------------*/
 #define Tiny_Stack_Size       64
@@ -35,7 +36,7 @@
 #define PriorityRealtime      8
 
 /* HAL Handlers --------------------------------------------------------------*/
-extern TIM_HandleTypeDef htim4;
+extern TIM_HandleTypeDef htim5;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 
@@ -44,6 +45,7 @@ extern UART_HandleTypeDef huart2;
 extern QueueHandle_t  USART_RxPort;
 extern QueueHandle_t  USART_TxPort;
 extern QueueHandle_t	Action_Port;
+extern QueueHandle_t	Ctrl_Port;
 
 /* Mutexes */
 /* Notifications */
@@ -54,10 +56,10 @@ extern QueueHandle_t	Action_Port;
 extern uint8_t Uart1_Rx_Buff[USART1_RX_BUFFER_SIZE];
 extern uint8_t Uart2_Rx_Buff[USART2_RX_BUFFER_SIZE];
 
-#define DIR_UP 		1
-#define DIR_DOWN 	2 
-#define DIR_RIGHT 3
-#define DIR_LEFT	4
+#define DIR_UP 		UP
+#define DIR_DOWN 	DOWN 
+#define DIR_RIGHT RIGHT
+#define DIR_LEFT	LEFT
 #define GAME_OVER 5
 #define GAME_CONTINUE 6
 

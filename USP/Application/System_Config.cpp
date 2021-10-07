@@ -54,13 +54,15 @@ uint8_t rev[80];
 void System_Resource_Init(void)
 {
   /* Drivers Init ---------------------*/
-  Timer_Init(&htim4, USE_HAL_DELAY);
-	Uart_Init(&huart1, Uart1_Rx_Buff, USART1_RX_BUFFER_SIZE, User_UART1_RxCpltCallback);
+  Timer_Init(&htim5, USE_HAL_DELAY);
+	
+//	Uart_Init(&huart1, Uart1_Rx_Buff, USART1_RX_BUFFER_SIZE, User_UART1_RxCpltCallback);
   
   /* RTOS resources Init --------------*/
   USART_RxPort    = xQueueCreate(4,sizeof(USART_COB));
   USART_TxPort    = xQueueCreate(4,sizeof(USART_COB));
 	Action_Port 		= xQueueCreate(1,1);
+	Ctrl_Port 			= xQueueCreate(2,1);
 	
   /* Other resources Init -------------*/
 	// ×Ö¿â³õÊ¼»¯
