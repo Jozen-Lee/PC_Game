@@ -149,7 +149,7 @@ void Gluttonous_Snake::Grade_Print(void)
 {
 	POINT_COLOR=RED;
 	LCD_ShowNum(190,67,object.Get_Current_Score(),3,16);
-	LCD_ShowNum(195,167,object.Get_Snake().speed,2,16);
+	LCD_ShowNum(195,167,object.Get_Snake().speed + 1,2,16);
 	LCD_ShowNum(190,255,object.Get_Target_Score(),3,16);
 }
 
@@ -190,10 +190,8 @@ void Gluttonous_Snake::Game_Introduction(void)
 	
 	
 	Show_Str(20,180,200,24,(uint8_t*)"关于速度:",24,0);
-	Show_Str(20,210,200,48,(uint8_t*)"小蛇的成绩每次高于通关分数,速度会加1,速度最大值为5",16,0);
-	
-	POINT_COLOR=BLACK;
-  LCD_DrawRectangle(120-30,280-30,120+30,280);	
+	Show_Str(10,210,220,48,(uint8_t*)"小蛇的成绩每次高于通关分数,速度会加1,速度最大值为5",16,0);
+
 	POINT_COLOR=RED;
 	Show_Str_Mid(0,280-24,(uint8_t*)"GoGoGo!",24,240);
 }
@@ -237,7 +235,7 @@ void Gluttonous_Snake::Beginning_Vedio(void)
 		  LCD_ShowNum(120-52+80+j*8,120,k,1,16);//依次显示十位,个位
 			num-=k*To_decarate_Num(10,1-j);
 		}
-		HAL_Delay(150);
+		HAL_Delay(100);
 	}
 	
 	//100%进度显示
@@ -250,6 +248,9 @@ void Gluttonous_Snake::Beginning_Vedio(void)
  */ 
 void Gluttonous_Snake::Game_Init(void)
 {
+	// 改变随机种子
+	srand(rand());
+	
 	// 加载动画
 	Beginning_Vedio();
 	

@@ -60,7 +60,7 @@ void System_Resource_Init(void)
   /* RTOS resources Init --------------*/
   USART_RxPort    = xQueueCreate(4,sizeof(USART_COB));
   USART_TxPort    = xQueueCreate(4,sizeof(USART_COB));
-	Action_Port 		= xQueueCreate(4,1);
+	Action_Port 		= xQueueCreate(1,1);
 	
   /* Other resources Init -------------*/
 	// 字库初始化
@@ -98,9 +98,7 @@ void System_Tasks_Init(void)
 //  /* Applications Init ----------------*/
 	App_Interface_Init();
 	App_Games_Init();
-	
-	// 开启第一个任务
-	vTaskResume(StartIF_Handle);
+
 }
 
 

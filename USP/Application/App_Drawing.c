@@ -42,31 +42,32 @@ void Start_Interface(void)
 {
 	int delta;
 	// 背景色
-	LCD_Clear(WHITE);
+	LCD_Clear(BLACK);
 	
 	// 小太阳
-	LCD_Draw_Picture(5,5,5+48,5+32,DARKBLUE,WHITE,gImage_sun);
+	LCD_Draw_Picture(5,5,5+58,5+58,YELLOW,BLACK,gImage_sun);
 	
 	POINT_COLOR=GREEN;
-	Show_Str_Mid(0,60,(uint8_t*)"开始游戏",24,240);
+	Show_Str_Mid(0,80,(uint8_t*)"开始游戏",32,240);
 	
 	POINT_COLOR=BLUE;
-	Show_Str_Mid(0,100,(uint8_t*)"阿巴阿巴出品",24,240);
-	Show_Str(70,130,40,16,(uint8_t*)"成员:",12,1);
-	Show_Str(110,130,36,48,(uint8_t*)"李爵煜王玲丽张文迪李洪文",12,1);
+	Show_Str_Mid(0,130,(uint8_t*)"阿巴阿巴出品",24,240);
+	POINT_COLOR=DARKBLUE;
+	Show_Str(70,160,40,16,(uint8_t*)"成员:",12,1);
+	Show_Str(110,160,36,48,(uint8_t*)"李爵煜王玲丽张文迪李洪文",12,1);
 	
 	POINT_COLOR=RED;
 	for(int i = 0; i < 4; i ++)
 	{
 		delta = i*40;
-		LCD_DrawRectangle(45+delta,200,45+delta+30,260);
-		LCD_DrawRectangle(50+delta,280,50+delta+20,320);
-		LCD_Draw_Circle(60+delta,230,10);
-		LCD_DrawLine(60+delta,245,60+delta,280);
+		LCD_DrawRectangle(45+delta,230,45+delta+30,280);
+		LCD_DrawRectangle(50+delta,300,50+delta+20,320);
+		LCD_Draw_Circle(60+delta,260,10);
+		LCD_DrawLine(60+delta,270,60+delta,300);
 	}
 	
 	POINT_COLOR=DARKBLUE;
-	LCD_DrawRectangle(40,90,200,200);
+	LCD_DrawRectangle(30,120,210,230);
 }
 
 void GamesChoose_Interface(void)

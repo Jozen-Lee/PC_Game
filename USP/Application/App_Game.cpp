@@ -62,7 +62,7 @@ void Game_Tetris(void *arg);
 void App_Games_Init(void)
 {
 	// 贪吃蛇
-	xTaskCreate(Game_Snake,							"Game.Snake", 					Small_Stack_Size,     NULL, PriorityHigh, 			 &SnakeGame_Handle);
+	xTaskCreate(Game_Snake,							"Game.Snake", 					Normal_Stack_Size,    NULL, PriorityHigh, 			 &SnakeGame_Handle);
 	xTaskCreate(Snake_Food,							"Snake.Food", 					Small_Stack_Size,     NULL, PriorityHigh, 			 &SnakeFood_Handle);
 	xTaskCreate(Snake_Sport,						"Snake.Sport", 					Small_Stack_Size,     NULL, PriorityHigh, 			 &SnakeSport_Handle);
 	xTaskCreate(Snake_Over,							"Snake.Over", 					Small_Stack_Size,     NULL, PriorityHigh, 			 &SnakeOver_Handle);	
@@ -138,7 +138,7 @@ uint8_t SnakeOver_Touch(void)
 				return 1;
 		 }
 		 // 返回
-		 else if(tp_dev.x[0]>40&&tp_dev.x[0]<200&&tp_dev.y[0]>240&&tp_dev.y[0]<270)
+		 else if(tp_dev.x[0]>40&&tp_dev.x[0]<200&&tp_dev.y[0]>200&&tp_dev.y[0]<230)
 		 {
 			 return 2;
 		 }
@@ -161,25 +161,26 @@ void Game_Snake(void *arg)
   {
 		// 说明界面
 		snake.Game_Introduction();
+		HAL_Delay(500);
 		touch_func = Snake_ID_Touch;
 		
 		// 等待
 		xQueueReceive(Action_Port,&res,portMAX_DELAY);
 		
 		// 游戏初始化
-		snake.Game_Init();
 		touch_func = Snake_Processing_Touch;
+		snake.Game_Init();
 		vTaskResume(SnakeFood_Handle);
 		vTaskResume(SnakeSport_Handle);
 		vTaskResume(SnakeOver_Handle);
+		
 		if(xQueueReceive(Action_Port,&res,portMAX_DELAY) == pdPASS)
 		{
 			if(res == GAME_OVER) 
 			{
-				vTaskSuspend(NULL);
 				vTaskSuspend(SnakeFood_Handle);
 				vTaskSuspend(SnakeSport_Handle);
-				vTaskResume(GamesIF_Handle);
+				vTaskSuspend(NULL);
 			}
 		}
 	}
@@ -208,16 +209,14 @@ void Snake_Food(void *arg)
 void Snake_Sport(void *arg)
 {
   /* Cache for Task */
-  TickType_t xLastWakeTime_t = xTaskGetTickCount();
-	
   /* Pre-Load for task */
 
   /* Infinite loop */
   for(;;)
   {
 		TickType_t _xTicksToWait = snake.Get_SnakeSpeed();
-		snake.Food_Update();
-		vTaskDelayUntil(&xLastWakeTime_t, _xTicksToWait);	
+		snake.Snake_Sport();
+		vTaskDelay(200);
 	}	
 }
 
@@ -230,21 +229,27 @@ void Snake_Over(void *arg)
   TickType_t xLastWakeTime_t = xTaskGetTickCount();
 	TickType_t _xTicksToWait = pdMS_TO_TICKS(50);
   /* Pre-Load for task */
-		uint8_t over = GAME_OVER;
+		uint8_t over;
   /* Infinite loop */
   for(;;)
   {
 		if(snake.Game_Over()) 
 		{
+			// 终止游戏
+			over = GAME_OVER;
 			xQueueSend(Action_Port, &over, 0);
+			vTaskDelay(200);
 			
 			// 游戏结束界面
 			snake.GameOver_Inf();
+			HAL_Delay(500);
 			touch_func = SnakeOver_Touch;
 			if(xQueueReceive(Action_Port,&over,portMAX_DELAY) == pdPASS)
 			{
+				touch_func = NULL;
 				if(over == 1) vTaskResume(SnakeGame_Handle);
 				else if(over == 2) vTaskResume(GamesIF_Handle);
+				vTaskSuspend(NULL);
 			}
 		}
 		vTaskDelayUntil(&xLastWakeTime_t, _xTicksToWait);	

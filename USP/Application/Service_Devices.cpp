@@ -28,8 +28,8 @@ TaskHandle_t DeviceTouch_Handle;
 void Device_PS2(void *arg);
 void Device_Touch(void *arg);
 
-// 触屏任务的函数指针 0 无数据 1-4 有效数字
-uint8_t (*touch_func)(void);
+// 触屏任务的函数指针 0 无数据 1-6 有效数字
+uint8_t (*touch_func)(void) = NULL;
 /* Exported devices ----------------------------------------------------------*/
 /* Motor & ESC & Other actuators*/
 /* Remote control */
@@ -82,7 +82,7 @@ void Device_Touch(void *arg)
 {
   /* Cache for Task */
   TickType_t xLastWakeTime_t = xTaskGetTickCount();
-	TickType_t _xTicksToWait = pdMS_TO_TICKS(20);
+	TickType_t _xTicksToWait = pdMS_TO_TICKS(50);
   /* Pre-Load for task */
 	uint8_t Res = 0;
   /* Infinite loop */
@@ -92,7 +92,11 @@ void Device_Touch(void *arg)
 		if(touch_func != NULL) 
 		{
 			Res = touch_func();
-			if(Res) xQueueSend(Action_Port, &Res, 0);
+			if(Res) 
+			{
+				vTaskDelay(500);
+				xQueueSend(Action_Port, &Res, 0);
+			}
 		}
 		
 		vTaskDelayUntil(&xLastWakeTime_t, _xTicksToWait);	

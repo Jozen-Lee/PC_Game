@@ -187,7 +187,6 @@ void GS_Object::Snake_Sport(void)
 	{
 		LCD_Fill(snake.snake_x[i],snake.snake_y[i],snake.snake_x[i]+snake.size-1,snake.snake_y[i]+snake.size-1,BLACK);
 	}
-	
 }
 
 
