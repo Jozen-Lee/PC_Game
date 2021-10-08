@@ -36,10 +36,10 @@
 /* Private define ------------------------------------------------------------*/
 
 /*
-	PG14-->DI
-	PA1-->DO
-	PC4-->CS
-	PH13-->CLK
+	PC4-->DI
+	PH13-->DO
+	PH15-->CS
+	PI1-->CLK
 */
 #define DI    HAL_GPIO_ReadPin(PS2_DAT_GPIO_Port,PS2_DAT_Pin) 
 #define DO_H  HAL_GPIO_WritePin(PS2_CMD_GPIO_Port,PS2_CMD_Pin,GPIO_PIN_SET)     

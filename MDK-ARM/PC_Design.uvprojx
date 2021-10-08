@@ -796,19 +796,19 @@
           <GroupName>Middlewares/Gmae/Tetris</GroupName>
           <Files>
             <File>
-              <FileName>game_map.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\USP\Middlewares\Game\Tetris\game_map.c</FilePath>
+              <FileName>tetris.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\USP\Middlewares\Game\Tetris\tetris.cpp</FilePath>
             </File>
             <File>
-              <FileName>object.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\USP\Middlewares\Game\Tetris\object.c</FilePath>
+              <FileName>tetris_map.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\USP\Middlewares\Game\Tetris\tetris_map.cpp</FilePath>
             </File>
             <File>
-              <FileName>process.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\USP\Middlewares\Game\Tetris\process.c</FilePath>
+              <FileName>tetris_object.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\USP\Middlewares\Game\Tetris\tetris_object.cpp</FilePath>
             </File>
           </Files>
         </Group>

@@ -60,7 +60,7 @@ uint32_t To_decarate_Num(uint32_t m,uint8_t n)
 }
 
 /**
- *@brief 整体页面
+ *@brief 贪吃蛇游戏页面
  */ 
 void Gluttonous_Snake::Game_Map(void)
 {

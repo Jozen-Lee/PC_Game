@@ -209,12 +209,13 @@ void OLED_ShowString(uint8_t x,uint8_t y,const uint8_t *p,uint8_t size)
         p++;
     }  
 }	
-
-//在指定位置显示一张图片
-//x:0~128
-//y:0~64
-//mode:0,反白显示;1,正常显示				 
-//size:选择字体 16/12 
+	/**
+	 *@brief 在OLED指定位置绘制图片
+	 *@param x0 y0 x1 y1 图片起止点
+	 *@param mode 0 反白显示 1 正常显示	
+	 *@param	p 图片存储地址
+	 *@note x:0~128 y:0~64
+	 */ 
 void OLED_Draw_Picture(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t mode, unsigned const char p[])
 {
 	char temp, t;

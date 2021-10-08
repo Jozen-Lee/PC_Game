@@ -1,11 +1,11 @@
-#ifndef __GAME_MAP_H_
-#define __GAME_MAP_H_
+#ifndef __TETRIS__MAP_H_
+#define __TETRIS__MAP_H_
 #include "stm32f4xx_hal.h"
 
-#define MAP_RIGHT 92
-#define MAP_BOTTOM 64
+#define MAP_WIDTH 180
+#define MAP_HEIGTH 200
 
-extern char Map[MAP_RIGHT][MAP_BOTTOM];
+extern char Map[MAP_WIDTH][MAP_HEIGTH];
 
 void Draw_Inf(void);
 void Draw_Map(void);

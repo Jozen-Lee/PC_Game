@@ -1,47 +1,135 @@
-#include "process.h"
-#include "game_map.h"
-#include "object.h"
+/**
+  ******************************************************************************
+  * Copyright (c) 2021 - ~, TuTu Studio
+  * @file    tetris.cpp
+  * @author  LJY 2250017028@qq.com
+  * @brief   Code for tetris game core code.
+  * @date    2021-09-04
+  * @version 1.0
+  * @par Change Log:
+  * <table>
+  * <tr><th>Date        <th>Version  <th>Author     <th>Description
+  * <tr><td>2021-10-08  <td> 1.0     <td>TuTu  			<td>Creator
+  * </table>
+  *
+  ==============================================================================
+                              How to use this driver  
+  ==============================================================================
+    @note
+      -# 初始化
+		 
+    @warning	
+      -# 
+	  
+  ******************************************************************************
+  * @attention
+  * 
+  * if you had modified this file, please make sure your code does not have many 
+  * bugs, update the version Number, write dowm your name and the date, the most
+  * important is make sure the users will have clear and definite understanding 
+  * through your new brief.
+  *
+  * <h2><center>&copy; Copyright (c) 2021 - ~,TuTu Studio.
+  * All rights reserved.</center></h2>
+  ******************************************************************************
+  */
+
+/* Includes ------------------------------------------------------------------*/
+#include "tetris.h"
+#include "tetris_map.h"
+#include "tetris_object.h"
 #include "stdlib.h"
 #include "time.h"
+#include "lcd.h"
+/* Private define ------------------------------------------------------------*/
 
+/* Private variables ---------------------------------------------------------*/
 //储存当前的状态
 Condition con_old;
 Condition con_now;
 Condition con_next;
 
-//void Game_Processing(void)
-//{
-//	
-//	uint8_t key = KEY_Scan(1);
-//	static uint8_t count = 0;
-//	if(con_now.alive == 0) Reset_Diamond();
-//	if(key == KEY2_PRES) Go_R_L(1); 		 //向右移动
-//	else if(key == KEY1_PRES) Go_R_L(0); //向左移动
-//	if(key == WKUP_PRES) Pos_Turn();		 //姿态变换
-//	if(key == KEY0_PRES) Over = 1;			 //退出
-//	count = (count+1)%3;								 //防止下落太快
-//	if(count == 0) 
-//	{
-//		if(Go_Down())	Update_Map(con_now);
-//		Game_Over();											
-//	}
-//	Show_Game();	
-//	if(con_now.alive == 0) Check_Map();
-//	
-//}
+uint16_t Scores;
+uint8_t Over;
+/* Private type --------------------------------------------------------------*/
+/* Private function declarations ---------------------------------------------*/
+/* Private function prototypes -----------------------------------------------*/
 
-//void Game_Init(void)
-//{
-//	Scores = 0;
-//	Over = 0;
-//	OLED_Clear();
-//	Object_Init();
-//	Map_Init();
-//	Reset_Diamond(); //更新con_now
-//	con_now = con_next;
-//	con_old = con_now;
-//	Reset_Diamond(); //重置con_next
-//}
+/**
+ *@brief 获取范围[min, max]随机数
+ */ 
+int Random(int min, int max)
+{
+	return (rand()%((max-min)+1) + min);
+}
+
+//mode: 0 清除 1 显示
+//place: 0 显示在游戏界面 1 显示在信息界面
+void Draw_Diamond(Condition con, char mode, char place)
+{
+	uint8_t i, j;
+	if(mode) POINT_COLOR = BLACK;
+	else POINT_COLOR = WHITE;
+	for(i=0;i<16;i++)
+	{
+		for(j=0;j<16;j++)
+		{
+			if(con.pos[i] & 0x8000)
+			{
+				if(place) 
+				{
+					switch(con.num)
+					{
+						case 1:	 LCD_DrawPoint(102+j,18+i); break;					
+						case 2:  LCD_DrawPoint(102+j,14+i); break;
+						case 3:  LCD_DrawPoint(104+j,16+i); break;
+						case 4:  LCD_DrawPoint(100+j,18+i); break;
+						case 5:  LCD_DrawPoint(100+j,18+i); break;
+						case 6:  LCD_DrawPoint(104+j,18+i); break;
+						case 7:  LCD_DrawPoint(104+j,18+i); break;
+					}	
+				}
+				else 
+				{
+					if(con.y+i >= 0) LCD_DrawPoint(con.x+j,con.y+i);
+				}
+			}
+			con.pos[i] <<=1;
+		}
+	}
+}
+
+void Game_Processing(uint8_t action)
+{
+	static uint8_t count = 0;
+	if(con_now.alive == 0) Reset_Diamond();
+	if(action == TETRIS_RIGHT) Go_R_L(1); 		 //向右移动
+	else if(action == TETRIS_LEFT) Go_R_L(0); //向左移动
+	if(action == TETRIS_TURN) Pos_Turn();		 //姿态变换
+	if(action == TETRIS_QUIT) Over = 1;			 //退出
+	count = (count+1)%3;								 //防止下落太快
+	if(count == 0) 
+	{
+		if(Go_Down())	Update_Map(con_now);
+		Game_Over();											
+	}
+	Show_Game();	
+	if(con_now.alive == 0) Check_Map();
+	
+}
+
+void Game_Init(void)
+{
+	Scores = 0;
+	Over = 0;
+	LCD_Clear(WHITE);
+	Object_Init();
+	Map_Init();
+	Reset_Diamond(); //更新con_now
+	con_now = con_next;
+	con_old = con_now;
+	Reset_Diamond(); //重置con_next
+}
 
 //重置方块信息
 void Reset_Diamond(void)
@@ -110,7 +198,7 @@ void Clear_Map(int p[])
 		{
 //			for(j=p[i]*4;j<p[i]*4+4;j++)
 //			{
-//				for(k=0;k<MAP_RIGHT;k++)
+//				for(k=0;k<MAP_WIDTH;k++)
 //				{
 //					Map[k][j] = 0;
 //				}
@@ -119,14 +207,14 @@ void Clear_Map(int p[])
 			{
 				if(j>=4)
 				{
-					for(k=0;k<MAP_RIGHT;k++)
+					for(k=0;k<MAP_WIDTH;k++)
 					{
 						Map[k][j] = Map[k][j-4];
 					}
 				}
 				else 
 				{
-					for(k=0;k<MAP_RIGHT;k++)
+					for(k=0;k<MAP_WIDTH;k++)
 					{
 						Map[k][j] = 0;
 					}					
@@ -143,18 +231,18 @@ void Check_Map(void)
 	int records[4] = {-1, -1, -1, -1};//记录需要清空的行
 	uint8_t t=0;	
 	uint8_t i, j;
-	for(i=0;i<MAP_BOTTOM/4;i++)
+	for(i=0;i<MAP_HEIGTH/4;i++)
 	{
-		for(j=0;j<MAP_RIGHT;j++)
+		for(j=0;j<MAP_WIDTH;j++)
 		{
 			if(Map[j][i*4]) check++;
 			else break;
-			if(check == MAP_RIGHT-1) 	records[t++] = i;
+			if(check == MAP_WIDTH-1) 	records[t++] = i;
 		}
 		check = 0;
 	}
 	Clear_Map(records);
-//	Scores += Game_Score(records);
+	Scores += Game_Score(records);
 }
 
 //方块下落函数
@@ -229,7 +317,7 @@ uint8_t Judge_Side(Condition con)
 	{
 		for(j=0;j<16;j++)
 		{
-			if((con.pos[i]&0x8000) && (con.x + j > MAP_RIGHT || Map[con.x + j][con.y + i])) return 1;
+			if((con.pos[i]&0x8000) && (con.x + j > MAP_WIDTH || Map[con.x + j][con.y + i])) return 1;
 				con.pos[i] <<= 1;
 		}
 	}
@@ -246,7 +334,7 @@ uint8_t Judge_Bottom(Condition con)
 	{
 		for(j=0;j<16;j++)
 		{
-			if((con.pos[i] & 0x8000) && con.y+i>=0 && ((Map[con.x+j][con.y+i]) || (con.y + i >= MAP_BOTTOM))) return 1;		
+			if((con.pos[i] & 0x8000) && con.y+i>=0 && ((Map[con.x+j][con.y+i]) || (con.y + i >= MAP_HEIGTH))) return 1;		
 			 con.pos[i] <<= 1;
 		}
 	}
@@ -283,24 +371,19 @@ void Game_Over(void)
 	{
 		for(i=0;i<-con_now.y;i++)
 		{
-//			if(con_now.pos[i]!=0) Over = 1;
+			if(con_now.pos[i]!=0) Over = 1;
 		}
 	}
 }
 
 void Show_Game(void)
 {
-//	Draw_Map();
+	Draw_Map();
 	Draw_Diamond(con_old,0,0); //清除上一次的方块
 	Draw_Diamond(con_now,1,0); //更新当前的方块
-//	Draw_Inf();
-//	OLED_Refresh_Gram();
+	Draw_Inf();
 	con_old = con_now; // 显示完后, 更新con_old
 }
 
-/**************************辅助函数********************************/
-//获取随机数[a,b]
-int Random(int a, int b)
-{
-	return (rand()%((b-a)+1) + a);
-}
+
+									/************************ COPYRIGHT(C) TuTu Studio **************************/

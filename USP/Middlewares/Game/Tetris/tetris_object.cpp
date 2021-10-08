@@ -1,41 +1,68 @@
-#include "object.h"
+/**
+  ******************************************************************************
+  * Copyright (c) 2021 - ~, TuTu Studio
+  * @file    .cpp
+  * @author  LJY 2250017028@qq.com
+  * @brief   Code for .
+  * @date    2021-09-04
+  * @version 1.0
+  * @par Change Log:
+  * <table>
+  * <tr><th>Date        <th>Version  <th>Author     <th>Description
+  * <tr><td>2021-09-04  <td> 1.0     <td>TuTu  			<td>Creator
+  * </table>
+  *
+  ==============================================================================
+			---------------------------创建不同的方块----------------------------
+			POS_1: **
+						 **
+						 
+			POS_2: ****
 
-/********************创建不同的方块******************
-POS_1: **
-			 **
-			 
-POS_2: ****
+			POS_3: *
+						 *
+						 **
 
-POS_3: *
-			 *
-			 **
+			POS_4:  *
+							*
+						 **
+						 
+			POS_5:  *
+						 ***
 
-POS_4:  *
-				*
-			 **
-			 
-POS_5:  *
-			 ***
+			POS_6: *
+						 **
+							*
 
-POS_6: *
-			 **
-			  *
+			POS_7:  *
+						 **
+						 *  
+  ******************************************************************************
+  * @attention
+  * 
+  * if you had modified this file, please make sure your code does not have many 
+  * bugs, update the version Number, write dowm your name and the date, the most
+  * important is make sure the users will have clear and definite understanding 
+  * through your new brief.
+  *
+  * <h2><center>&copy; Copyright (c) 2021 - ~,TuTu Studio.
+  * All rights reserved.</center></h2>
+  ******************************************************************************
+  */
 
-POS_7:  *
-			 **
-			 *
-****************************************************/
+/* Includes ------------------------------------------------------------------*/
+#include "tetris_object.h"
+#include "lcd.h"
 
+/* Private define ------------------------------------------------------------*/
 
-struct POS_1 pos_1;
-struct POS_2 pos_2;
-struct POS_3 pos_3;
-struct POS_4 pos_4;
-struct POS_5 pos_5;
-struct POS_6 pos_6;
-struct POS_7 pos_7;
+/* Private variables ---------------------------------------------------------*/
+/* Private type --------------------------------------------------------------*/
+/* Private function declarations ---------------------------------------------*/
+/* Private function prototypes -----------------------------------------------*/
 
-void Object_Init(void)
+	
+void Tetris_Object::Object_Init(void)
 {
 	uint8_t i;
 	/*oxxo
@@ -213,38 +240,4 @@ void Object_Init(void)
 	for(i=12;i<16;i++) pos_7.shape[1][i] = 0x0000;
 }
 
-
-//mode: 0 清除 1 显示
-//place: 0 显示在游戏界面 1 显示在信息界面
-void Draw_Diamond(Condition con, char mode, char place)
-{
-	uint8_t i, j;
-	for(i=0;i<16;i++)
-	{
-		for(j=0;j<16;j++)
-		{
-			if(con.pos[i] & 0x8000)
-			{
-				if(place) 
-				{
-					switch(con.num)
-					{
-//						case 1:	 OLED_DrawPoint(102+j,18+i,mode); break;					
-//						case 2:  OLED_DrawPoint(102+j,14+i,mode); break;
-//						case 3:  OLED_DrawPoint(104+j,16+i,mode); break;
-//						case 4:  OLED_DrawPoint(100+j,18+i,mode); break;
-//						case 5:  OLED_DrawPoint(100+j,18+i,mode); break;
-//						case 6:  OLED_DrawPoint(104+j,18+i,mode); break;
-//						case 7:  OLED_DrawPoint(104+j,18+i,mode); break;
-					}	
-				}
-				else 
-				{
-//					if(con.y+i >= 0) OLED_DrawPoint(con.x+j,con.y+i,mode);
-				}
-			}
-			con.pos[i] <<=1;
-		}
-	}
-}
-
+									/************************ COPYRIGHT(C) TuTu Studio **************************/
