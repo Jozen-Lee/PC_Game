@@ -55,6 +55,7 @@ void Service_Devices_Init(void)
 /**
  *@brief PS2ÈÎÎñ
  */ 
+uint8_t rx,ry,lx,ly;
 void Device_PS2(void *arg)
 {
   /* Cache for Task */
@@ -67,10 +68,13 @@ void Device_PS2(void *arg)
 		ps2.UpdateData();
 		if(ps2.GetKeyData(KEY_PAD_UP) == PS2_PRESS)  		{ dir = DIR_UP; 	xQueueSend(Ctrl_Port, &dir, 0);}
 		if(ps2.GetKeyData(KEY_PAD_DOWN) == PS2_PRESS)  	{ dir = DIR_DOWN; xQueueSend(Ctrl_Port, &dir, 0);}
-		if(ps2.GetKeyData(KEY_PAD_LEFT) == PS2_PRESS)  	{ dir = DIR_LEFT; xQueueSend(Ctrl_Port, &dir, 0);}
+		if(ps2.GetKeyData(KEY_PAD_LEFT) == PS2_PRESS )  	{ dir = DIR_LEFT; xQueueSend(Ctrl_Port, &dir, 0);}
 		if(ps2.GetKeyData(KEY_PAD_RIGHT) == PS2_PRESS)  { dir = DIR_RIGHT; xQueueSend(Ctrl_Port, &dir, 0);}
-		
-		vTaskDelay(50);
+		rx = ps2.GetRodData(ROD_RX);
+		ry = ps2.GetRodData(ROD_RY);
+		lx = ps2.GetRodData(ROD_LX);
+		ly = ps2.GetRodData(ROD_LY);
+		vTaskDelay(100);
 	}
 }
 

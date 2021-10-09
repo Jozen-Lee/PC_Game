@@ -1,76 +1,141 @@
+/**
+  ******************************************************************************
+  * Copyright (c) 2021 - ~, TuTu Studio
+  * @file    tetris_map.cpp
+  * @author  LJY 2250017028@qq.com
+  * @brief   Code for tetris map.
+  * @date    2021-09-04
+  * @version 1.0
+  * @par Change Log:
+  * <table>
+  * <tr><th>Date        <th>Version  <th>Author     <th>Description
+  * <tr><td>2021-10-08  <td> 1.0     <td>TuTu  			<td>Creator
+  * </table>
+  *
+  ==============================================================================
+  ******************************************************************************
+  * @attention
+  * 
+  * if you had modified this file, please make sure your code does not have many 
+  * bugs, update the version Number, write dowm your name and the date, the most
+  * important is make sure the users will have clear and definite understanding 
+  * through your new brief.
+  *
+  * <h2><center>&copy; Copyright (c) 2021 - ~,TuTu Studio.
+  * All rights reserved.</center></h2>
+  ******************************************************************************
+  */
+
+/* Includes ------------------------------------------------------------------*/
 #include "tetris_map.h"
-#include "tetris.h"
-#include "tetris_object.h"
-#include "diamond_picture.h"
 #include "text.h"
-#include "delay.h"
+/* Private define ------------------------------------------------------------*/
 
-extern Condition con_next;
-extern Condition con_now;
-extern int Scores;
+/* Private variables ---------------------------------------------------------*/
+/* Private type --------------------------------------------------------------*/
+/* Private function declarations ---------------------------------------------*/
+/* Private function prototypes -----------------------------------------------*/
 
-//创建地图
-//0:未填充
-//1:该位置已经填充 
-char Map[MAP_WIDTH][MAP_HEIGTH];
-
-void Draw_Inf(void)
+/**
+ *@brief 绘制游戏的交互界面
+ */ 
+void Tetris_Map::Draw_Interface(void)
 {
-	if(con_now.alive == 0) Draw_Diamond(con_next, 0, 1); //清除
-	else Draw_Diamond(con_next, 1, 1); // 显示下一个方块的形状
 	//贪吃蛇主页面
 	LCD_Clear(WHITE);
 	POINT_COLOR=BLACK;
-	LCD_DrawRectangle(1, 1, 180, 200);
-	LCD_DrawRectangle(2, 2, 179, 199);
-	LCD_DrawLine(3,3,179,3);
-	LCD_Fill(3,3,5,199,BLACK);
-	LCD_Fill(177,3,178,199,BLACK);	
+//	LCD_DrawRectangle(1, 1, 180, 200);
+//	LCD_DrawRectangle(2, 2, 179, 199);
+//	LCD_DrawLine(3,3,179,3);
+//	LCD_Fill(3,3,5,199,BLACK);
+//	LCD_Fill(177,3,178,199,BLACK);	
 	
 	
 	//下一个图案的打印框
 	LCD_DrawRectangle(180, 1, 240, 100);
 	LCD_DrawRectangle(181, 2, 239,  99);
-	Show_Str_Mid(180,40,(uint8_t*)"下一个",16,60);
+	Show_Str_Mid(180,15,(uint8_t*)"下一个",16,60);
+	LCD_DrawLine(180,40,240,40);
 	
 	//得分打印框
-	LCD_DrawRectangle(179, 99, 240,  200);
+	LCD_DrawRectangle(181, 99, 240,  200);
 	LCD_DrawRectangle(180, 100, 239,  199);
-	LCD_DrawRectangle(179, 199, 240,  320);
-	Show_Str_Mid(180,140,(uint8_t*)"得分",16,60);
+	LCD_DrawRectangle(180, 199, 240,  320);
+	Show_Str_Mid(180,115,(uint8_t*)"得分",16,60);
+	LCD_DrawLine(180,140,240,140);
+	
+	LCD_DrawRectangle(180, 280, 240,  320);
+	Show_Str_Mid(180,290,(uint8_t*)"退出",16,60);
 	
 	
 	//操作框
-	LCD_DrawRectangle(2, 200, 179,  319);
+	LCD_DrawRectangle(0, 200, 179,  319);
 	
 	//操作按键
-//	LCD_Draw_Circle(90 ,230,25); 	//上键
-//	LCD_Draw_Circle(90,290,25); 	//下键
-	LCD_Draw_Circle(40,260,25);		//左键
-	LCD_Draw_Circle(140,260,25);	//右键
-	
-//	OLED_DrawLine(92,0,92,64,1);
-//	OLED_DrawLine(92,32,128,32,1);
-//	OLED_ShowString(100,0,(uint8_t*)"Next",12);
-//	OLED_ShowString(96,33,(uint8_t*)"Score",12);
-//	OLED_ShowNum(93,50,Scores,4,16);
+	POINT_COLOR = BLACK;
+	LCD_Draw_Circle(35,260,25);		//左键
+	LCD_Draw_Circle(145,260,25);	//右键
+	LCD_DrawRectangle(70,250,110,280);
+	Show_Font(30,250,(uint8_t*)"左",16,0);
+	Show_Font(140,250,(uint8_t*)"右",16,0);
+	Show_Font(85,260,(uint8_t*)"转",12,0);
 }
 
-void Draw_Map(void)
+/**
+ *@brief 根据地图数组绘制游戏界面
+ */ 
+void Tetris_Map::Draw_GameMap(void)
 {
+	static uint8_t count = 0;
 	int i,j;
+	count = (count + 1) % 30;
+	POINT_COLOR = BLACK;
 	for(i=0;i<MAP_WIDTH;i++)
 	{
 		for(j=0;j<MAP_HEIGTH;j++)
 		{
-			if(Map[i][j]) POINT_COLOR = BLACK;
-			else POINT_COLOR = WHITE;
-			LCD_DrawPoint(i,j);
+			if(Map[i][j]) 
+			{
+				POINT_COLOR = BLACK;
+				LCD_DrawPoint(i,j);
+			}
+			else if(!count)
+			{
+				POINT_COLOR = WHITE;
+				LCD_DrawPoint(i,j);
+			}
 		}
 	}
 }
 
-void Map_Init(void)
+/**
+ *@brief 说明内容的显示
+ */ 
+void Tetris_Map::Inf_Show(void)
+{
+	LCD_Clear(WHITE);
+	POINT_COLOR = BLUE;
+	Show_Str_Mid(0,140,(uint8_t*)"欢迎进入", 24,240);
+	Show_Str_Mid(0,180,(uint8_t*)"俄罗斯方块", 24,240);
+	POINT_COLOR = RED;
+	Show_Str_Mid(0,240,(uint8_t*)"GoGoGo!!", 16, 240);
+}
+
+/**
+ *@brief 结束界面的绘制
+ */ 
+void Tetris_Map::Quit_Show(void)
+{
+	LCD_Clear(BLACK);
+	POINT_COLOR=WHITE;
+	Show_Str_Mid(0,80,(uint8_t*)"重新开始",24,240);	
+	Show_Str_Mid(0,200,(uint8_t*)"返回",24,240);	
+}
+
+/**
+ *@brief 初始化地图数组
+ */ 
+void Tetris_Map::Init(void)
 {
 	int i, j;
 	for(i=0;i<MAP_WIDTH;i++)
@@ -80,79 +145,68 @@ void Map_Init(void)
 			Map[i][j] = 0;
 		}
 	}
+	
+	// 绘制交互界面
+	Draw_Interface();
 }
 
-//返回1:进入游戏
-//返回0:退出该界面
-uint8_t Game_Interface_Show(void)
+/**
+ *@brief 方块消除
+ *@param p 存储要消除的行的数组 
+ */ 
+void Tetris_Map::Tetris_Eliminate(int p[])
 {
-//	uint8_t key;
-//		OLED_Clear();
-//		Show_Str(72,16,48,16,(uint8_t*)"Tetris", 16);
-//		Show_Str(72,32,48,16,(uint8_t*)"Worlds", 16);
-//		OLED_Draw_Picture(2, 10, 66, 60, 1, gImage_diamond);
-//		OLED_DrawRectangle(0, 0, 127, 63, 1);
-//		OLED_Refresh_Gram();
-//		while(1)
-//		{
-//			key = KEY_Scan(0);
-//			if(key == WKUP_PRES) return 1;
-//			else if(key == KEY2_PRES) return 0;
-//			delay_ms(100);
-//		}
+	int i,j,k;
+	for(i=0;i<4;i++)
+	{
+		if(p[i]!=-1)
+		{
+			for(j=p[i]*4+3;j>=0;j--)
+			{
+				if(j>=4)
+				{
+					for(k=0;k<MAP_WIDTH;k++)
+					{
+						Map[k][j] = Map[k][j-4];
+					}
+				}
+				else 
+				{
+					for(k=0;k<MAP_WIDTH;k++)
+					{
+						Map[k][j] = 0;
+					}					
+				}
+			}
+		}
+	}
 }
 
-//返回1:进入游戏
-//返回0:退出游戏
-//mode: 0 开始游戏 1 重新游戏
-uint8_t Game_Show(uint8_t mode)
+/**
+ *@brief 检测界面是否需要消除某些行
+ *@return 消除的行数
+ */ 
+
+uint8_t Tetris_Map::Check_Map(void)
 {
-//	uint8_t key;
-//	int choice = 0;
-//	OLED_Clear();
-//	if(mode)
-//	{
-//		Show_Str(28,8,72,16,(uint8_t*)"Game Over", 16);		
-//		Show_Str(16,26,96,16,(uint8_t*)"Your Scores:", 16);
-//		OLED_ShowNum(52,44,Scores, 3, 16);
-//		OLED_Refresh_Gram();
-//		delay_ms(2000); 
-//		OLED_Clear();
-//		Show_Str(36,14,56,16,(uint8_t*)"Restart", 16);		
-//		Show_Str(48,34,32,16,(uint8_t*)"Quit", 16);		
-//	}
-//	else
-//	{
-//		Show_Str(44,14,40,16,(uint8_t*)"Start", 16);
-//		Show_Str(48,34,32,16,(uint8_t*)"Quit", 16);
-//	}
-//	OLED_DrawRectangle(30,13,98,31, !choice);		//初始位置
-//	OLED_Refresh_Gram();
-//	while(1)
-//	{
-//		key = KEY_Scan(0);
-//		if(key == WKUP_PRES)
-//		{
-//			if(choice == 0) return 1;
-//			else return 0;
-//		}
-//		else if(key == KEY0_PRES||key == KEY1_PRES) 
-//		{
-//			if(key == KEY0_PRES)
-//			{			
-//				choice ++;
-//				if(choice == 2) choice = 0;
-//			}
-//			else
-//			{
-//				choice --;
-//				if(choice < 0) choice = 1;
-//			}
-//		}
-//		OLED_DrawRectangle(30,13,98,31, !choice);
-//		OLED_DrawRectangle(30,33,98,51,  choice);
-//		OLED_Refresh_Gram();
-//		My_delay(5); //延时100ms
-//	}
+	uint8_t check=0;
+	int records[4] = {-1, -1, -1, -1};//记录需要清空的行
+	uint8_t t=0;	
+	uint8_t i, j;
+	for(i=0;i<MAP_HEIGTH/4;i++)
+	{
+		for(j=0;j<MAP_WIDTH;j++)
+		{
+			if(Map[j][i*4]) check++;
+			else break;
+			if(check == MAP_WIDTH-1) 	records[t++] = i;
+		}
+		check = 0;
+	}
+	Tetris_Eliminate(records);
+	return t;
 }
 
+
+
+	/************************ COPYRIGHT(C) TuTu Studio **************************/

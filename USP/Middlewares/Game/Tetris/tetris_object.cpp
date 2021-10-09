@@ -1,9 +1,9 @@
 /**
   ******************************************************************************
   * Copyright (c) 2021 - ~, TuTu Studio
-  * @file    .cpp
+  * @file    tetris_object.cpp
   * @author  LJY 2250017028@qq.com
-  * @brief   Code for .
+  * @brief   Code for tetirs_object.
   * @date    2021-09-04
   * @version 1.0
   * @par Change Log:
