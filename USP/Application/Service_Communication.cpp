@@ -29,7 +29,7 @@ void Task_UsartTransmit(void *arg);
 void Service_Communication_Init(void)
 {
   xTaskCreate(Task_UsartRecieve,	"Com.Usart RxPort" , 	Small_Stack_Size,    		NULL, PriorityHigh,   			&UsartRxPort_Handle);
-  xTaskCreate(Task_UsartTransmit,	"Com.Usart TxPort" , 	Small_Stack_Size,    		NULL, PriorityHigh,   			&UsartTxPort_Handle);
+//  xTaskCreate(Task_UsartTransmit,	"Com.Usart TxPort" , 	Small_Stack_Size,    		NULL, PriorityHigh,   			&UsartTxPort_Handle);
 }
 
 /*---------------------------------------------- USART Manager --------------------------------------------*/
@@ -89,7 +89,7 @@ uint32_t User_UART1_RxCpltCallback(uint8_t* Recv_Data, uint16_t ReceiveLen)
     Usart_RxCOB.port_num = 1;
     Usart_RxCOB.len      = ReceiveLen;
     Usart_RxCOB.address  = Recv_Data;
-    xQueueSendFromISR(USART_RxPort,&Usart_RxCOB,0);
+//    xQueueSendFromISR(USART_RxPort,&Usart_RxCOB,0);
   }
   return 0;
 }

@@ -83,10 +83,10 @@ void App_Games_Init(void)
 	xTaskCreate(Snake_Ctrl,							"Snake.Ctrl", 				Small_Stack_Size,     NULL, PriorityHigh, 			 &SnakeCtrl_Handle);
 	
 	// 俄罗斯方块
-	xTaskCreate(Game_Tetris,						"Game.Tetris", 				Small_Stack_Size,     NULL, PriorityHigh, 			 &TetrisGame_Handle);
-	xTaskCreate(Tetris_Progress,				"Game.Progress", 			Small_Stack_Size,     NULL, PriorityHigh, 			 &TetrisProgress_Handle);
-	xTaskCreate(Tetris_Over,						"Game.Over", 					Small_Stack_Size,     NULL, PriorityHigh, 			 &TetrisOver_Handle);
-	xTaskCreate(Tetris_Ctrl,						"Game.Ctrl", 					Small_Stack_Size,     NULL, PriorityHigh, 			 &TetrisCtrl_Handle);
+	xTaskCreate(Game_Tetris,						"Game.Tetris", 				Normal_Stack_Size,     NULL, PriorityHigh, 			 &TetrisGame_Handle);
+	xTaskCreate(Tetris_Progress,				"Game.Progress", 			Normal_Stack_Size,     NULL, PriorityHigh, 			 &TetrisProgress_Handle);
+	xTaskCreate(Tetris_Over,						"Game.Over", 					Normal_Stack_Size,     NULL, PriorityHigh, 			 &TetrisOver_Handle);
+	xTaskCreate(Tetris_Ctrl,						"Game.Ctrl", 					Normal_Stack_Size,     NULL, PriorityHigh, 			 &TetrisCtrl_Handle);
 
 	
 	// 任务全挂起
@@ -357,15 +357,14 @@ uint8_t Tetris_Processing_Touch(void)
 		} 		
 		if(tp_dev.x[0]>180&&tp_dev.x[0]<240&&tp_dev.y[0]>280&&tp_dev.y[0]<320)
 		{	
-			cmd = DIR_DOWN;
-			xQueueSend(Ctrl_Port, &cmd, 0);			
+			tetris.Action(TETRIS_QUIT);
 		} 		
 	}
 	return 0;
 }
 
 /**
- *@brief 贪吃蛇结束界面的触屏函数
+ *@brief 俄罗斯方块结束界面的触屏函数
  */ 
 uint8_t TetrisOver_Touch(void)
 {

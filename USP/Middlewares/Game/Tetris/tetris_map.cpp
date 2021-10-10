@@ -43,13 +43,8 @@ void Tetris_Map::Draw_Interface(void)
 {
 	//贪吃蛇主页面
 	LCD_Clear(WHITE);
-	POINT_COLOR=BLACK;
-//	LCD_DrawRectangle(1, 1, 180, 200);
-//	LCD_DrawRectangle(2, 2, 179, 199);
-//	LCD_DrawLine(3,3,179,3);
-//	LCD_Fill(3,3,5,199,BLACK);
-//	LCD_Fill(177,3,178,199,BLACK);	
-	
+	POINT_COLOR=BLACK;	
+	LCD_Fill(176,0,180,200,BLACK);
 	
 	//下一个图案的打印框
 	LCD_DrawRectangle(180, 1, 240, 100);
@@ -157,17 +152,17 @@ void Tetris_Map::Init(void)
 void Tetris_Map::Tetris_Eliminate(int p[])
 {
 	int i,j,k;
-	for(i=0;i<4;i++)
+	for(i=0;i<8;i++)
 	{
 		if(p[i]!=-1)
 		{
-			for(j=p[i]*4+3;j>=0;j--)
+			for(j=p[i]*8+7;j>=0;j--)
 			{
-				if(j>=4)
+				if(j>=8)
 				{
 					for(k=0;k<MAP_WIDTH;k++)
 					{
-						Map[k][j] = Map[k][j-4];
+						Map[k][j] = Map[k][j-8];
 					}
 				}
 				else 
@@ -190,14 +185,14 @@ void Tetris_Map::Tetris_Eliminate(int p[])
 uint8_t Tetris_Map::Check_Map(void)
 {
 	uint8_t check=0;
-	int records[4] = {-1, -1, -1, -1};//记录需要清空的行
+	int records[8] = {-1, -1, -1, -1, -1, -1, -1, -1};//记录需要清空的行
 	uint8_t t=0;	
 	uint8_t i, j;
-	for(i=0;i<MAP_HEIGTH/4;i++)
+	for(i=0;i<MAP_HEIGTH/8;i++)
 	{
 		for(j=0;j<MAP_WIDTH;j++)
 		{
-			if(Map[j][i*4]) check++;
+			if(Map[j][i*8]) check++;
 			else break;
 			if(check == MAP_WIDTH-1) 	records[t++] = i;
 		}

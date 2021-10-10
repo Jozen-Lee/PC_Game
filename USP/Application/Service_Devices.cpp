@@ -62,6 +62,7 @@ void Device_PS2(void *arg)
 
   /* Pre-Load for task */
   uint8_t dir;
+	uint8_t trans[3] = {1, 2, 3};
   /* Infinite loop */
   for(;;)
   {
@@ -75,6 +76,8 @@ void Device_PS2(void *arg)
 		lx = ps2.GetRodData(ROD_LX);
 		ly = ps2.GetRodData(ROD_LY);
 		vTaskDelay(100);
+		
+		HAL_UART_Transmit_DMA(&huart2, trans, 3);
 	}
 }
 

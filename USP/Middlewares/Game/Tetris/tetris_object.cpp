@@ -69,175 +69,168 @@ void Tetris_Object::Object_Init(void)
 		oxxo
 		oooo
 		oooo*/
-	for(i=0;i<4;i++) pos_1.shape[0][i]   = 0x0ff0;
-	for(i=4;i<8;i++) pos_1.shape[0][i]   = 0x0ff0;
-	for(i=8;i<12;i++) pos_1.shape[0][i]  = 0x0000;
-	for(i=12;i<16;i++) pos_1.shape[0][i] = 0x0000;	
+	for(i=0;i<16;i++) pos_1.shape[0][i]   = 0x00ffff00;
+	for(i=16;i<32;i++) pos_1.shape[0][i] = 0x00000000;	
 	
 	/*oxoo
 		oxoo
 		oxoo
 		oxoo*/
-	for(i=0;i<4;i++) pos_2.shape[0][i]   = 0x0f00;
-	for(i=4;i<8;i++) pos_2.shape[0][i]   = 0x0f00;
-	for(i=8;i<12;i++) pos_2.shape[0][i]  = 0x0f00;
-	for(i=12;i<16;i++) pos_2.shape[0][i] = 0x0f00;
+	for(i=0;i<32;i++) pos_2.shape[0][i]   = 0x00ff0000;
 	
 	/*oooo
 		xxxx
 		oooo
 		oooo*/
-	for(i=0;i<4;i++) pos_2.shape[1][i]   = 0x0000;
-	for(i=4;i<8;i++) pos_2.shape[1][i]   = 0xffff;
-	for(i=8;i<12;i++) pos_2.shape[1][i]  = 0x0000;
-	for(i=12;i<16;i++) pos_2.shape[1][i] = 0x0000;
+	for(i=0;i<8;i++) pos_2.shape[1][i]   	= 0x00000000;
+	for(i=8;i<16;i++) pos_2.shape[1][i]   = 0xffffffff;
+	for(i=16;i<32;i++) pos_2.shape[1][i]  = 0x00000000;
 	
 	/*oxoo
 		oxoo
 		oxxo
 		oooo*/
-	for(i=0;i<4;i++) pos_3.shape[0][i]   = 0x0f00;
-	for(i=4;i<8;i++) pos_3.shape[0][i]   = 0x0f00;
-	for(i=8;i<12;i++) pos_3.shape[0][i]  = 0x0ff0;
-	for(i=12;i<16;i++) pos_3.shape[0][i] = 0x0000;
+	for(i=0;i<16;i++) pos_3.shape[0][i]   = 0x00ff0000;
+	for(i=16;i<24;i++) pos_3.shape[0][i]  = 0x00ffff00;
+	for(i=24;i<32;i++) pos_3.shape[0][i] 	= 0x00000000;
 	
 	/*ooxo
 		xxxo
 		oooo
 		oooo*/
-	for(i=0;i<4;i++) pos_3.shape[1][i]   = 0x00f0;
-	for(i=4;i<8;i++) pos_3.shape[1][i]   = 0xfff0;
-	for(i=8;i<12;i++) pos_3.shape[1][i]  = 0x0000;
-	for(i=12;i<16;i++) pos_3.shape[1][i] = 0x0000;
+	for(i=0;i<8;i++) pos_3.shape[1][i]   	= 0x0000ff00;
+	for(i=8;i<16;i++) pos_3.shape[1][i]   = 0xffffff00;
+	for(i=16;i<24;i++) pos_3.shape[1][i]  = 0x00000000;
+	for(i=24;i<32;i++) pos_3.shape[1][i] 	= 0x00000000;
 
 	/*xxoo
 		oxoo
 		oxoo
 		oooo*/
-	for(i=0;i<4;i++) pos_3.shape[2][i]   = 0xff00;
-	for(i=4;i<8;i++) pos_3.shape[2][i]   = 0x0f00;
-	for(i=8;i<12;i++) pos_3.shape[2][i]  = 0x0f00;
-	for(i=12;i<16;i++) pos_3.shape[2][i] = 0x0000;	
+	for(i=0;i<8;i++) pos_3.shape[2][i]   = 0xffff0000;
+	for(i=8;i<16;i++) pos_3.shape[2][i]   = 0x00ff0000;
+	for(i=16;i<24;i++) pos_3.shape[2][i]  = 0x00ff0000;
+	for(i=24;i<32;i++) pos_3.shape[2][i] = 0x00000000;	
 
 	/*oooo
 		xxxo
 		xooo
 		oooo*/
-	for(i=0;i<4;i++) pos_3.shape[3][i] =   0x0000;
-	for(i=4;i<8;i++) pos_3.shape[3][i] =   0xfff0;
-	for(i=8;i<12;i++) pos_3.shape[3][i] =  0xf000;
-	for(i=12;i<16;i++) pos_3.shape[3][i] = 0x0000;	
+	for(i=0;i<8;i++) pos_3.shape[3][i] 		=  0x00000000;
+	for(i=8;i<16;i++) pos_3.shape[3][i] 	=  0xffffff00;
+	for(i=16;i<24;i++) pos_3.shape[3][i] 	=  0xff000000;
+	for(i=24;i<32;i++) pos_3.shape[3][i] 	=  0x00000000;	
 
 	/*ooxo
 		ooxo
 		oxxo
 		oooo*/
-	for(i=0;i<4;i++) pos_4.shape[0][i]   = 0x00f0;
-	for(i=4;i<8;i++) pos_4.shape[0][i]   = 0x00f0;
-	for(i=8;i<12;i++) pos_4.shape[0][i]  = 0x0ff0;
-	for(i=12;i<16;i++) pos_4.shape[0][i] = 0x0000;
+	for(i=0;i<8;i++) pos_4.shape[0][i]   	= 0x0000ff00;
+	for(i=8;i<16;i++) pos_4.shape[0][i]   = 0x0000ff00;
+	for(i=16;i<24;i++) pos_4.shape[0][i]  = 0x00ffff00;
+	for(i=24;i<32;i++) pos_4.shape[0][i] 	= 0x00000000;
 	
 	
 	/*oooo
 		oxxx
 		ooox
 		oooo*/
-	for(i=0;i<4;i++) pos_4.shape[1][i]   = 0x0000;
-	for(i=4;i<8;i++) pos_4.shape[1][i]   = 0x0fff;
-	for(i=8;i<12;i++) pos_4.shape[1][i]  = 0x000f;
-	for(i=12;i<16;i++) pos_4.shape[1][i] = 0x0000;	
+	for(i=0;i<8;i++) pos_4.shape[1][i]   	= 0x00000000;
+	for(i=8;i<16;i++) pos_4.shape[1][i]   = 0x00ffffff;
+	for(i=16;i<24;i++) pos_4.shape[1][i]  = 0x000000ff;
+	for(i=24;i<32;i++) pos_4.shape[1][i] 	= 0x00000000;	
 	
 	/*ooxx
 		ooxo
 		ooxo
 		oooo*/
-	for(i=0;i<4;i++) pos_4.shape[2][i]   = 0x00ff;
-	for(i=4;i<8;i++) pos_4.shape[2][i]   = 0x00f0;
-	for(i=8;i<12;i++) pos_4.shape[2][i]  = 0x00f0;
-	for(i=12;i<16;i++) pos_4.shape[2][i] = 0x0000;	
+	for(i=0;i<8;i++) pos_4.shape[2][i]   	= 0x0000ffff;
+	for(i=8;i<16;i++) pos_4.shape[2][i]   = 0x0000ff00;
+	for(i=16;i<24;i++) pos_4.shape[2][i]  = 0x0000ff00;
+	for(i=24;i<32;i++) pos_4.shape[2][i] 	= 0x00000000;	
 
 	
 	/*oxoo
 		oxxx
 		oooo
 		oooo*/
-	for(i=0;i<4;i++) pos_4.shape[3][i]   = 0x0f00;
-	for(i=4;i<8;i++) pos_4.shape[3][i]   = 0x0fff;
-	for(i=8;i<12;i++) pos_4.shape[3][i]  = 0x0000;
-	for(i=12;i<16;i++) pos_4.shape[3][i] = 0x0000;	
+	for(i=0;i<8;i++) pos_4.shape[3][i]   	= 0x00ff0000;
+	for(i=8;i<16;i++) pos_4.shape[3][i]   = 0x00ffffff;
+	for(i=16;i<24;i++) pos_4.shape[3][i]  = 0x00000000;
+	for(i=24;i<32;i++) pos_4.shape[3][i] 	= 0x00000000;	
 	
 	/*ooxo
 		oxxx
 		oooo
 		oooo*/
-	for(i=0;i<4;i++) pos_5.shape[0][i]   = 0x00f0;
-	for(i=4;i<8;i++) pos_5.shape[0][i]   = 0x0fff;
-	for(i=8;i<12;i++) pos_5.shape[0][i]  = 0x0000;
-	for(i=12;i<16;i++) pos_5.shape[0][i] = 0x0000;	
+	for(i=0;i<8;i++) pos_5.shape[0][i]   	= 0x0000ff00;
+	for(i=8;i<16;i++) pos_5.shape[0][i]   = 0x00ffffff;
+	for(i=16;i<24;i++) pos_5.shape[0][i]  = 0x00000000;
+	for(i=24;i<32;i++) pos_5.shape[0][i] 	= 0x00000000;	
 
 	/*ooxo
 		oxxo
 		ooxo
 		oooo*/
-	for(i=0;i<4;i++) pos_5.shape[1][i]   = 0x00f0;
-	for(i=4;i<8;i++) pos_5.shape[1][i]   = 0x0ff0;
-	for(i=8;i<12;i++) pos_5.shape[1][i]  = 0x00f0;
-	for(i=12;i<16;i++) pos_5.shape[1][i] = 0x0000;		
+	for(i=0;i<8;i++) pos_5.shape[1][i]   	= 0x0000ff00;
+	for(i=8;i<16;i++) pos_5.shape[1][i]   = 0x00ffff00;
+	for(i=16;i<24;i++) pos_5.shape[1][i]  = 0x0000ff00;
+	for(i=24;i<32;i++) pos_5.shape[1][i] 	= 0x00000000;		
 	
 	/*oooo
 		oxxx
 		ooxo
 		oooo*/
-	for(i=0;i<4;i++) pos_5.shape[2][i]   = 0x0000;
-	for(i=4;i<8;i++) pos_5.shape[2][i]   = 0x0fff;
-	for(i=8;i<12;i++) pos_5.shape[2][i]  = 0x00f0;
-	for(i=12;i<16;i++) pos_5.shape[2][i] = 0x0000;
+	for(i=0;i<8;i++) pos_5.shape[2][i]   	= 0x00000000;
+	for(i=8;i<16;i++) pos_5.shape[2][i]   = 0x00ffffff;
+	for(i=16;i<24;i++) pos_5.shape[2][i]  = 0x0000ff00;
+	for(i=24;i<32;i++) pos_5.shape[2][i] 	= 0x00000000;
 	
 	/*ooxo
 		ooxx
 		ooxo
 		oooo*/
-	for(i=0;i<4;i++) pos_5.shape[3][i]   = 0x00f0;
-	for(i=4;i<8;i++) pos_5.shape[3][i]   = 0x00ff;
-	for(i=8;i<12;i++) pos_5.shape[3][i]  = 0x00f0;
-	for(i=12;i<16;i++) pos_5.shape[3][i] = 0x0000;
+	for(i=0;i<8;i++) pos_5.shape[3][i]   	= 0x0000ff00;
+	for(i=8;i<16;i++) pos_5.shape[3][i]   = 0x0000ffff;
+	for(i=16;i<24;i++) pos_5.shape[3][i]  = 0x0000ff00;
+	for(i=24;i<32;i++) pos_5.shape[3][i] 	= 0x00000000;
 	
 	/*oxoo
 		oxxo
 		ooxo
 		oooo*/
-	for(i=0;i<4;i++) pos_6.shape[0][i]   = 0x0f00;
-	for(i=4;i<8;i++) pos_6.shape[0][i]   = 0x0ff0;
-	for(i=8;i<12;i++) pos_6.shape[0][i]  = 0x00f0;
-	for(i=12;i<16;i++) pos_6.shape[0][i] = 0x0000;
+	for(i=0;i<8;i++) pos_6.shape[0][i]   	= 0x00ff0000;
+	for(i=8;i<16;i++) pos_6.shape[0][i]   = 0x00ffff00;
+	for(i=16;i<24;i++) pos_6.shape[0][i]  = 0x0000ff00;
+	for(i=24;i<32;i++) pos_6.shape[0][i] 	= 0x00000000;
 	
 	/*oxxo
 		xxoo
 		oooo
 		oooo*/
-	for(i=0;i<4;i++) pos_6.shape[1][i]   = 0x0ff0;
-	for(i=4;i<8;i++) pos_6.shape[1][i]   = 0xff00;
-	for(i=8;i<12;i++) pos_6.shape[1][i]  = 0x0000;
-	for(i=12;i<16;i++) pos_6.shape[1][i] = 0x0000;
+	for(i=0;i<8;i++) pos_6.shape[1][i]   	= 0x00ffff00;
+	for(i=8;i<16;i++) pos_6.shape[1][i]   = 0xffff0000;
+	for(i=16;i<24;i++) pos_6.shape[1][i]  = 0x00000000;
+	for(i=24;i<32;i++) pos_6.shape[1][i] 	= 0x00000000;
 	
 	/*ooxo
 		oxxo
 		oxoo
 		oooo*/
-	for(i=0;i<4;i++) pos_7.shape[0][i]   = 0x00f0;
-	for(i=4;i<8;i++) pos_7.shape[0][i]   = 0x0ff0;
-	for(i=8;i<12;i++) pos_7.shape[0][i]  = 0x0f00;
-	for(i=12;i<16;i++) pos_7.shape[0][i] = 0x0000;
+	for(i=0;i<8;i++) pos_7.shape[0][i]   	= 0x0000ff00;
+	for(i=8;i<16;i++) pos_7.shape[0][i]   = 0x00ffff00;
+	for(i=16;i<24;i++) pos_7.shape[0][i]  = 0x00ff0000;
+	for(i=24;i<32;i++) pos_7.shape[0][i] 	= 0x00000000;
 
 	
 	/*xxoo
 		oxxo
 		oooo
 		oooo*/
-	for(i=0;i<4;i++) pos_7.shape[1][i]   = 0xff00;
-	for(i=4;i<8;i++) pos_7.shape[1][i]   = 0x0ff0;
-	for(i=8;i<12;i++) pos_7.shape[1][i]  = 0x0000;
-	for(i=12;i<16;i++) pos_7.shape[1][i] = 0x0000;
+	for(i=0;i<8;i++) pos_7.shape[1][i]   	= 0xffff0000;
+	for(i=8;i<16;i++) pos_7.shape[1][i]   = 0x00ffff00;
+	for(i=16;i<24;i++) pos_7.shape[1][i]  = 0x00000000;
+	for(i=24;i<32;i++) pos_7.shape[1][i] 	= 0x00000000;
 }
 
 									/************************ COPYRIGHT(C) TuTu Studio **************************/

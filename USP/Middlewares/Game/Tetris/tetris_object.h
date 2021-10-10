@@ -42,37 +42,37 @@
 /* Private type --------------------------------------------------------------*/
 typedef struct 
 {
-	uint16_t shape[1][16];
+	uint32_t shape[1][32];
 }POS_1;
 
 typedef struct 
 {
-	uint16_t shape[2][16];
+	uint32_t shape[2][32];
 }POS_2;
 
 typedef struct 
 {
-	uint16_t shape[4][16];
+	uint32_t shape[4][32];
 }POS_3;
 
 typedef struct 
 {
-	uint16_t shape[4][16];
+	uint32_t shape[4][32];
 }POS_4;
 
 typedef struct 
 {
-	uint16_t shape[4][16];	
+	uint32_t shape[4][32];	
 }POS_5;
 
 typedef struct 
 {
-	uint16_t shape[2][16];
+	uint32_t shape[2][32];
 }POS_6;
 
 typedef struct 
 {
-	uint16_t shape[2][16];	
+	uint32_t shape[2][32];	
 }POS_7;
 
 /* Exported macros -----------------------------------------------------------*/

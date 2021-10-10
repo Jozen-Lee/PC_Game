@@ -34,7 +34,7 @@
 #include "stm32f4xx_hal.h"
 
 /* Private define ------------------------------------------------------------*/
-#define MAP_WIDTH 180
+#define MAP_WIDTH 176
 #define MAP_HEIGTH 200
 
 /* Private include -----------------------------------------------------------*/

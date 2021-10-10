@@ -89,11 +89,11 @@ void Tetris::Draw_Tetris(Condition con, char mode, char place)
 	uint8_t i, j;
 	if(mode) POINT_COLOR = con.color;
 	else POINT_COLOR = WHITE;
-	for(i=0;i<16;i++)
+	for(i=0;i<32;i++)
 	{
-		for(j=0;j<16;j++)
+		for(j=0;j<32;j++)
 		{
-			if(con.pos[i] & 0x8000)
+			if(con.pos[i] & 0x80000000)
 			{
 				if(place) 
 				{
@@ -185,31 +185,31 @@ void Tetris::Reset_Tetris(void)
 	}
 	con_next.alive = 1;
 	con_next.num = Random(1,7); //随机获得方块样式
-	con_next.x = -4 + 4 * Random(0, 40); // 随机获得起始位置
+	con_next.x = -8 + 8 * Random(0, 16); // 随机获得起始位置
 	con_next.y = -16;
 	con_next.color = Get_Random_Color();
 	switch(con_next.num)
 	{
 		case 1: con_next.pos_choice = 0;
-						for(i=0;i<16;i++) con_next.pos[i] = obj.pos_1.shape[con_next.pos_choice][i];
+						for(i=0;i<32;i++) con_next.pos[i] = obj.pos_1.shape[con_next.pos_choice][i];
 						break;
 		case 2: con_next.pos_choice = Random(0,1);
-						for(i=0;i<16;i++) con_next.pos[i] = obj.pos_2.shape[con_next.pos_choice][i];
+						for(i=0;i<32;i++) con_next.pos[i] = obj.pos_2.shape[con_next.pos_choice][i];
 						break;
 		case 3: con_next.pos_choice = Random(0,3);
-						for(i=0;i<16;i++) con_next.pos[i] = obj.pos_3.shape[con_next.pos_choice][i];
+						for(i=0;i<32;i++) con_next.pos[i] = obj.pos_3.shape[con_next.pos_choice][i];
 						break;
 		case 4: con_next.pos_choice = Random(0,3);
-						for(i=0;i<16;i++) con_next.pos[i] = obj.pos_4.shape[con_next.pos_choice][i];
+						for(i=0;i<32;i++) con_next.pos[i] = obj.pos_4.shape[con_next.pos_choice][i];
 						break;
 		case 5: con_next.pos_choice = Random(0,3);
-						for(i=0;i<16;i++) con_next.pos[i] = obj.pos_5.shape[con_next.pos_choice][i];
+						for(i=0;i<32;i++) con_next.pos[i] = obj.pos_5.shape[con_next.pos_choice][i];
 						break;
 		case 6: con_next.pos_choice = Random(0,1);
-						for(i=0;i<16;i++) con_next.pos[i] = obj.pos_6.shape[con_next.pos_choice][i];
+						for(i=0;i<32;i++) con_next.pos[i] = obj.pos_6.shape[con_next.pos_choice][i];
 						break;
 		case 7: con_next.pos_choice = Random(0,1);
-						for(i=0;i<16;i++) con_next.pos[i] = obj.pos_7.shape[con_next.pos_choice][i];
+						for(i=0;i<32;i++) con_next.pos[i] = obj.pos_7.shape[con_next.pos_choice][i];
 						break;
 	}
 }
@@ -220,11 +220,11 @@ void Tetris::Reset_Tetris(void)
 void Tetris::Update_Map(Condition con)
 {
 	int i, j;
-	for(i=0;i<16;i++)
+	for(i=0;i<32;i++)
 	{
-		for(j=0;j<16;j++)
+		for(j=0;j<32;j++)
 		{
-				if(con.pos[i]&0x8000) 
+				if(con.pos[i]&0x80000000) 
 				{
 					if(con.y+i >=0)	map.Map[con.x+j][con.y+i] = 1;
 				}
@@ -241,10 +241,10 @@ void Tetris::Update_Map(Condition con)
 //1:下落失败
 uint8_t Tetris::Go_Down(void)
 {
-	con_now.y += 4;
+	con_now.y += 8;
 	if(Judge_Bottom(con_now)) 
 	{
-		con_now.y -= 4;
+		con_now.y -= 8;
 		return 1;
 	}
 	else 
@@ -260,14 +260,14 @@ uint8_t Tetris::Go_Down(void)
 void Tetris::Linear_Move(uint8_t dir)
 {
 	// 正常移动
-	if(dir == TETRIS_RIGHT) con_now.x += 4;
-	else con_now.x -= 4;
+	if(dir == TETRIS_RIGHT) con_now.x += 8;
+	else con_now.x -= 8;
 	
 	// 碰壁处理
 	if(Judge_Side(con_now))
 	{
-		if(dir == TETRIS_RIGHT) con_now.x -= 4;
-		else con_now.x += 4;
+		if(dir == TETRIS_RIGHT) con_now.x -= 8;
+		else con_now.x += 8;
 	}
 }
 
@@ -284,25 +284,25 @@ void Tetris::Pos_Turn(void)
 	switch(con.num)
 	{
 		case 1: con.pos_choice = (con.pos_choice + 1)%1;
-						for(i=0;i<16;i++) con.pos[i] = obj.pos_1.shape[con.pos_choice][i];
+						for(i=0;i<32;i++) con.pos[i] = obj.pos_1.shape[con.pos_choice][i];
 						break;
 		case 2: con.pos_choice = (con.pos_choice + 1)%2;
-						for(i=0;i<16;i++) con.pos[i] = obj.pos_2.shape[con.pos_choice][i];
+						for(i=0;i<32;i++) con.pos[i] = obj.pos_2.shape[con.pos_choice][i];
 						break;
 		case 3: con.pos_choice = (con.pos_choice + 1)%4;
-						for(i=0;i<16;i++) con.pos[i] = obj.pos_3.shape[con.pos_choice][i];
+						for(i=0;i<32;i++) con.pos[i] = obj.pos_3.shape[con.pos_choice][i];
 						break;
 		case 4: con.pos_choice = (con.pos_choice + 1)%4;
-						for(i=0;i<16;i++) con.pos[i] = obj.pos_4.shape[con.pos_choice][i];
+						for(i=0;i<32;i++) con.pos[i] = obj.pos_4.shape[con.pos_choice][i];
 						break;
 		case 5: con.pos_choice = (con.pos_choice + 1)%4;
-						for(i=0;i<16;i++) con.pos[i] = obj.pos_5.shape[con.pos_choice][i];
+						for(i=0;i<32;i++) con.pos[i] = obj.pos_5.shape[con.pos_choice][i];
 						break;
 		case 6: con.pos_choice = (con.pos_choice + 1)%2;
-						for(i=0;i<16;i++) con.pos[i] = obj.pos_6.shape[con.pos_choice][i];
+						for(i=0;i<32;i++) con.pos[i] = obj.pos_6.shape[con.pos_choice][i];
 						break;
 		case 7: con.pos_choice = (con.pos_choice + 1)%2;
-						for(i=0;i<16;i++) con.pos[i] = obj.pos_7.shape[con.pos_choice][i];
+						for(i=0;i<32;i++) con.pos[i] = obj.pos_7.shape[con.pos_choice][i];
 						break;
 	}
 	if((!Judge_Side(con)) && (!Judge_Bottom(con))) 
@@ -320,11 +320,11 @@ void Tetris::Pos_Turn(void)
 uint8_t Tetris::Judge_Side(Condition con)
 {
 	int i,j;
-	for(i=0;i<16;i++)
+	for(i=0;i<32;i++)
 	{
-		for(j=0;j<16;j++)
+		for(j=0;j<32;j++)
 		{
-			if(con.pos[i]&0x8000)
+			if(con.pos[i]&0x80000000)
 			{
 				if((map.Map[con.x + j][con.y + i]) || con.x + j > MAP_WIDTH || con.x + j < 0)
 				{
@@ -345,11 +345,11 @@ uint8_t Tetris::Judge_Side(Condition con)
 uint8_t Tetris::Judge_Bottom(Condition con)
 {
 	int i,j;
-	for(i=0;i<16;i++)
+	for(i=0;i<32;i++)
 	{
-		for(j=0;j<16;j++)
+		for(j=0;j<32;j++)
 		{
-			if((con.pos[i] & 0x8000) && con.y+i>=0 && ((map.Map[con.x+j][con.y+i]) || (con.y + i >= MAP_HEIGTH))) return 1;		
+			if((con.pos[i] & 0x80000000) && con.y+i>=0 && ((map.Map[con.x+j][con.y+i]) || (con.y + i >= MAP_HEIGTH))) return 1;		
 			 con.pos[i] <<= 1;
 		}
 	}
@@ -385,7 +385,10 @@ uint8_t Tetris::Game_Over(void)
 	{
 		for(i=0;i<-con_now.y;i++)
 		{
-			if(con_now.pos[i]!=0) return 1;
+			if(con_now.pos[i]!=0) 
+			{
+				return 1;
+			}
 		}
 		return 0;
 	}

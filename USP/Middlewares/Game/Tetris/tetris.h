@@ -60,7 +60,7 @@ typedef struct
 	uint8_t num; 			 		//当前正在运动的方块
 	uint16_t color;				//方块颜色
 	uint8_t pos_choice; 	//该姿态对应的编号
-	uint16_t pos[16]; 		//运动方块对应的姿态
+	uint32_t pos[32]; 		//运动方块对应的姿态
 	int x;				 				//方块的横坐标
 	int y;				 				//方块的纵坐标
 	uint8_t alive;			 	//0:失活 1:存活

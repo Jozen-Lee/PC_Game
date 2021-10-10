@@ -56,7 +56,7 @@ void System_Resource_Init(void)
   /* Drivers Init ---------------------*/
   Timer_Init(&htim5, USE_HAL_DELAY);
 	
-//	Uart_Init(&huart1, Uart1_Rx_Buff, USART1_RX_BUFFER_SIZE, User_UART1_RxCpltCallback);
+	Uart_Init(&huart1, Uart1_Rx_Buff, USART1_RX_BUFFER_SIZE, User_UART1_RxCpltCallback);
   
   /* RTOS resources Init --------------*/
   USART_RxPort    = xQueueCreate(4,sizeof(USART_COB));
@@ -95,11 +95,11 @@ void System_Tasks_Init(void)
   /* Syetem Service init --------------*/
 //  Service_Debug_Init();
   Service_Devices_Init();
-//  Service_Communication_Init();
+  Service_Communication_Init();
 //	
 //  /* Applications Init ----------------*/
-	App_Interface_Init();
-	App_Games_Init();
+//	App_Interface_Init();
+//	App_Games_Init();
 
 }
 
