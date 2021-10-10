@@ -60,7 +60,6 @@ void System_Resource_Init(void)
   
   /* RTOS resources Init --------------*/
   USART_RxPort    = xQueueCreate(4,sizeof(USART_COB));
-  USART_TxPort    = xQueueCreate(4,sizeof(USART_COB));
 	Action_Port 		= xQueueCreate(1,1);
 	Ctrl_Port 			= xQueueCreate(1,1);
 	
@@ -98,8 +97,8 @@ void System_Tasks_Init(void)
   Service_Communication_Init();
 //	
 //  /* Applications Init ----------------*/
-//	App_Interface_Init();
-//	App_Games_Init();
+	App_Interface_Init();
+	App_Games_Init();
 
 }
 

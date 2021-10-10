@@ -355,7 +355,7 @@ uint8_t Tetris_Processing_Touch(void)
 			cmd = DIR_UP;
 			xQueueSend(Ctrl_Port, &cmd, 0);			
 		} 		
-		if(tp_dev.x[0]>180&&tp_dev.x[0]<240&&tp_dev.y[0]>280&&tp_dev.y[0]<320)
+		if(tp_dev.x[0]>200&&tp_dev.x[0]<240&&tp_dev.y[0]>290&&tp_dev.y[0]<320)
 		{	
 			tetris.Action(TETRIS_QUIT);
 		} 		

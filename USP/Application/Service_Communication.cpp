@@ -57,7 +57,7 @@ void Task_UsartRecieve(void *arg)
     {
 			switch(Usart_RxCOB.port_num)
 			{
-				case 1: xQueueSend(Action_Port, Usart_RxCOB.address, 0);
+				case 1: xQueueSend(Ctrl_Port, Usart_RxCOB.address, 0);
 					break;
 				default: break;
 			}
@@ -89,7 +89,7 @@ uint32_t User_UART1_RxCpltCallback(uint8_t* Recv_Data, uint16_t ReceiveLen)
     Usart_RxCOB.port_num = 1;
     Usart_RxCOB.len      = ReceiveLen;
     Usart_RxCOB.address  = Recv_Data;
-//    xQueueSendFromISR(USART_RxPort,&Usart_RxCOB,0);
+    xQueueSendFromISR(USART_RxPort,&Usart_RxCOB,0);
   }
   return 0;
 }

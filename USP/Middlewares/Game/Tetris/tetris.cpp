@@ -185,7 +185,7 @@ void Tetris::Reset_Tetris(void)
 	}
 	con_next.alive = 1;
 	con_next.num = Random(1,7); //随机获得方块样式
-	con_next.x = -8 + 8 * Random(0, 16); // 随机获得起始位置
+	con_next.x = -8 + 8 * Random(1, 16); // 随机获得起始位置
 	con_next.y = -16;
 	con_next.color = Get_Random_Color();
 	switch(con_next.num)
@@ -349,8 +349,11 @@ uint8_t Tetris::Judge_Bottom(Condition con)
 	{
 		for(j=0;j<32;j++)
 		{
-			if((con.pos[i] & 0x80000000) && con.y+i>=0 && ((map.Map[con.x+j][con.y+i]) || (con.y + i >= MAP_HEIGTH))) return 1;		
-			 con.pos[i] <<= 1;
+			if((con.pos[i] & 0x80000000) && (con.y+i>=0) && (map.Map[con.x+j][con.y+i] || (con.y + i >= MAP_HEIGTH)))
+			{
+				return 1;		
+			}
+			con.pos[i] <<= 1;
 		}
 	}
 	return 0;
@@ -358,7 +361,6 @@ uint8_t Tetris::Judge_Bottom(Condition con)
 /**
  *@brief 赋分函数
  */ 
-//得分函数
 uint8_t Tetris::Game_Score(uint8_t num)
 {
 	switch(num)
