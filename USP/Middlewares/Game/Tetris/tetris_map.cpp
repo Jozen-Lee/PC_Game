@@ -81,20 +81,16 @@ void Tetris_Map::Draw_Interface(void)
  */ 
 void Tetris_Map::Draw_GameMap(void)
 {
-	static uint8_t count = 0;
-	int i,j;
-	count = (count + 1) % 30;
-	POINT_COLOR = BLACK;
-	for(i=0;i<MAP_WIDTH;i++)
+	for(int i=0;i<MAP_WIDTH;i++)
 	{
-		for(j=0;j<MAP_HEIGTH;j++)
+		for(int j=0;j<MAP_HEIGTH;j++)
 		{
 			if(Map[i][j]) 
 			{
 				POINT_COLOR = BLACK;
 				LCD_DrawPoint(i,j);
 			}
-			else if(!count)
+			else 
 			{
 				POINT_COLOR = WHITE;
 				LCD_DrawPoint(i,j);

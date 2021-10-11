@@ -84,16 +84,18 @@ uint16_t Get_Random_Color(void)
  *@param mode 0 清除 1 显示
  *@param place 0 显示在游戏界面 1 显示在信息界面
  */ 
-void Tetris::Draw_Tetris(Condition con, char mode, char place)
+void Tetris::Draw_Tetris(const Condition& con, char mode, char place)
 {
 	uint8_t i, j;
 	if(mode) POINT_COLOR = con.color;
 	else POINT_COLOR = WHITE;
+	uint32_t index;
 	for(i=0;i<32;i++)
 	{
+		index = 0x80000000;
 		for(j=0;j<32;j++)
 		{
-			if(con.pos[i] & 0x80000000)
+			if(con.pos[i] & index)
 			{
 				if(place) 
 				{
@@ -113,7 +115,7 @@ void Tetris::Draw_Tetris(Condition con, char mode, char place)
 					if(con.y+i >= 0) LCD_DrawPoint(con.x+j,con.y+i);
 				}
 			}
-			con.pos[i] <<=1;
+			index >>= 1;
 		}
 	}
 }
@@ -123,14 +125,18 @@ void Tetris::Draw_Tetris(Condition con, char mode, char place)
  */ 
 void Tetris::Progress(void)
 {
-	// 重置方块状态
-	if(con_now.alive == 0) Reset_Tetris();
-	
 	// 方块掉落
-	if(Go_Down()) Update_Map(con_now);											
+	if(Go_Down()) 
+	{
+		// 更新地图
+		Update_Map(con_now);		
+	}	
 	
 	// 更新游戏显示界面
 	Update_GameShow();	
+	
+	// 重置方块状态
+	if(con_now.alive == 0) Reset_Tetris();
 	
 	// 检测行消除
 	if(con_now.alive == 0) scores += Game_Score(map.Check_Map());
@@ -185,7 +191,7 @@ void Tetris::Reset_Tetris(void)
 	}
 	con_next.alive = 1;
 	con_next.num = Random(1,7); //随机获得方块样式
-	con_next.x = -8 + 8 * Random(1, 16); // 随机获得起始位置
+	con_next.x = 8 * Random(0, 16); // 随机获得起始位置
 	con_next.y = -16;
 	con_next.color = Get_Random_Color();
 	switch(con_next.num)
@@ -217,18 +223,20 @@ void Tetris::Reset_Tetris(void)
 /**
  *@brief 更新地图函数
  */ 
-void Tetris::Update_Map(Condition con)
+void Tetris::Update_Map(const Condition& con)
 {
 	int i, j;
+	uint32_t index = 0x80000000;
 	for(i=0;i<32;i++)
 	{
+		index = 0x80000000;
 		for(j=0;j<32;j++)
 		{
-				if(con.pos[i]&0x80000000) 
+				if(con.pos[i] & index) 
 				{
 					if(con.y+i >=0)	map.Map[con.x+j][con.y+i] = 1;
 				}
-				con.pos[i] <<= 1;			
+				index >>= 1;			
 		}
 	}
 	
@@ -241,16 +249,22 @@ void Tetris::Update_Map(Condition con)
 //1:下落失败
 uint8_t Tetris::Go_Down(void)
 {
-	con_now.y += 8;
-	if(Judge_Bottom(con_now)) 
+	uint32_t count = 0;
+	count = (count + 1) % speed;
+	if(!count) 
 	{
-		con_now.y -= 8;
-		return 1;
+		con_now.y += 8;
+		if(Judge_Bottom(con_now)) 
+		{
+			con_now.y -= 8;
+			return 1;
+		}
+		else 
+		{
+			return 0;
+		}
 	}
-	else 
-	{
-		return 0;
-	}
+	return 0;
 }
 
 /**
@@ -317,21 +331,23 @@ void Tetris::Pos_Turn(void)
  *@return 0 下一次运动未碰壁
 					1 下一次运动碰壁,无法继续
  */ 
-uint8_t Tetris::Judge_Side(Condition con)
+uint8_t Tetris::Judge_Side(const Condition& con)
 {
 	int i,j;
+	uint32_t index = 0x80000000;
 	for(i=0;i<32;i++)
 	{
+		index = 0x80000000;
 		for(j=0;j<32;j++)
 		{
-			if(con.pos[i]&0x80000000)
+			if(con.pos[i]&index)
 			{
 				if((map.Map[con.x + j][con.y + i]) || con.x + j > MAP_WIDTH || con.x + j < 0)
 				{
 					return 1;
 				}
 			}
-			con.pos[i] <<= 1;
+			index >>= 1;
 		}
 	}
 	return 0;
@@ -342,18 +358,20 @@ uint8_t Tetris::Judge_Side(Condition con)
  *@return 0 下一次运动未碰壁
 					1 下一次运动碰壁,无法继续
  */ 
-uint8_t Tetris::Judge_Bottom(Condition con)
+uint8_t Tetris::Judge_Bottom(const Condition& con)
 {
 	int i,j;
+	uint32_t index = 0x80000000;
 	for(i=0;i<32;i++)
 	{
+		index = 0x80000000;
 		for(j=0;j<32;j++)
 		{
-			if((con.pos[i] & 0x80000000) && (con.y+i>=0) && (map.Map[con.x+j][con.y+i] || (con.y + i >= MAP_HEIGTH)))
+			if((con.pos[i] & index) && (con.y+i>=0) && (map.Map[con.x+j][con.y+i] || (con.y + i >= MAP_HEIGTH)))
 			{
 				return 1;		
 			}
-			con.pos[i] <<= 1;
+			index >>= 1;
 		}
 	}
 	return 0;
@@ -399,15 +417,15 @@ uint8_t Tetris::Game_Over(void)
 
 void Tetris::Update_GameShow(void)
 {
-	// 绘制游戏地图
-	map.Draw_GameMap();
+//	// 清除上一次的方块
+//	Draw_Tetris(con_old,0,0); 
 	
-	// 清除上一次的方块
-	Draw_Tetris(con_old,0,0); 
+	// 绘制游戏地图
+	map.Draw_GameMap();	
 	
 	// 更新当前的方块
 	Draw_Tetris(con_now,1,0); 
-	
+		
 	// 显示分数
 	POINT_COLOR = BLACK;
 	LCD_ShowNum(203,155,scores,2,24);
@@ -416,8 +434,8 @@ void Tetris::Update_GameShow(void)
 	if(con_now.alive == 0) Draw_Tetris(con_next, 0, 1); 
 	else Draw_Tetris(con_next, 1, 1);
 	
-	// 显示完后, 更新con_old
-	con_old = con_now; 
+//	// 显示完后, 更新con_old
+//	con_old = con_now; 
 }
 
 

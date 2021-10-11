@@ -42,8 +42,8 @@
 #define TETRIS_ACC		13
 #define TETRIS_QUIT 	14	
 
-#define SPEED_SLOW 100
-#define SPEED_FAST 30
+#define SPEED_SLOW 20
+#define SPEED_FAST 6
 
 /* Private include -----------------------------------------------------------*/
 
@@ -55,7 +55,7 @@
 /* Exported types ------------------------------------------------------------*/
 
 //储存方块的状态
-typedef struct 
+typedef struct _Condition
 {
 	uint8_t num; 			 		//当前正在运动的方块
 	uint16_t color;				//方块颜色
@@ -64,6 +64,11 @@ typedef struct
 	int x;				 				//方块的横坐标
 	int y;				 				//方块的纵坐标
 	uint8_t alive;			 	//0:失活 1:存活
+	
+//	&_Condition operator=()
+//	{
+//		
+//	}
 } Condition;	
 
 #ifdef __cplusplus
@@ -91,13 +96,13 @@ public:
 private:
 	
 	// 绘制方块
-	void Draw_Tetris(Condition con, char mode, char place);
+	void Draw_Tetris(const Condition& con, char mode, char place);
 
 	// 重置方块
 	void Reset_Tetris(void);
 	
 	// 更新地图
-	void Update_Map(Condition con);
+	void Update_Map(const Condition& con);
 
 	// 清空地图
 	void Clear_Map(int p[]);
@@ -112,10 +117,10 @@ private:
 	void Linear_Move(uint8_t dir);
 	
 	// 判断是否左右碰壁
-	uint8_t Judge_Side(Condition con);
+	uint8_t Judge_Side(const Condition& con);
 	
 	// 判断是否碰到底部
-	uint8_t Judge_Bottom(Condition con);
+	uint8_t Judge_Bottom(const Condition& con);
 	
 	// 赋分函数
 	uint8_t Game_Score(uint8_t num);

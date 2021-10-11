@@ -66,14 +66,19 @@ void GS_Object::Food_Appear(void)
 		//随机数产生公式num=rand()%(n-m+1)+m,范围是[m,n]
 		if(snake.size==2)
 		{
-			food.food_x=(unsigned)snake.size*(rand()%(88-2+1)+2);//[4,176] RTC_GetCounter()
+			food.food_x=(unsigned)snake.size*(rand()%(88-2+1)+2);//[4,176]
 			food.food_y=(unsigned)snake.size*(rand()%(99-2+1)+2);//[4,198]
 		}
-		if(snake.size==3)
+		else if(snake.size==3)
 		{
 			food.food_x=(unsigned)snake.size*(rand()%(58-2+1)+2);//[6,174]
 			food.food_y=(unsigned)snake.size*(rand()%(66-2+1)+2);//[6,198]
 		}	
+		else if(snake.size==6)
+		{
+			food.food_x=(unsigned)snake.size*(rand()%(28-2+1)+2);//[12,168]
+			food.food_y=(unsigned)snake.size*(rand()%(32-2+1)+2);//[12,192]			
+		}
 		
 		//设置食物的颜色和得分
 		food.food_color=BLACK;

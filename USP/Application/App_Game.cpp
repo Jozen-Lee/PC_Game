@@ -460,11 +460,14 @@ void Tetris_Progress(void *arg)
 {
   /* Cache for Task */
   /* Pre-Load for task */
+	
+	// 刷新时间间隔
+	uint8_t Update_ms = 5;
   /* Infinite loop */
   for(;;)
   {
 		tetris.Progress();
-		vTaskDelay(tetris.Get_Speed());	
+		vTaskDelay(Update_ms);	
 	}	
 }
 
