@@ -339,7 +339,7 @@
               <MiscControls>--cpp11</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F429xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;             ../Drivers/STM32F4xx_HAL_Driver/Inc;             ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;             ../Drivers/CMSIS/Device/ST/STM32F4xx/Include;             ../Drivers/CMSIS/Include;             ../Middlewares/Third_Party/FreeRTOS/Source/include;             ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;             ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;             ..\SRML;             ..\USP;             ..\USP\Application;             ..\USP\Drivers;             ..\USP\Middlewares\UpperMonitor;             ..\USP\Middlewares\Game\Gluttonous_Snake;             ..\USP\Middlewares\Game\Tetris;             ..\USP\Drivers\Devices\LCD;             ..\USP\Drivers\Devices\OLED;             ..\USP\Drivers\Devices\PS2;             ..\USP\Drivers\Devices\FLASH;             ..\USP\Drivers\Devices\24CXX;             ..\USP\Drivers\Components\IIC;             ..\USP\Drivers\Components\SPI;             ..\USP\Drivers\Components\DELAY</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;..\SRML;..\USP;..\USP\Application;..\USP\Drivers;..\USP\Middlewares\UpperMonitor;..\USP\Middlewares\Game\Gluttonous_Snake;..\USP\Middlewares\Game\Tetris;..\USP\Drivers\Devices\LCD;..\USP\Drivers\Devices\OLED;..\USP\Drivers\Devices\PS2;..\USP\Drivers\Devices\FLASH;..\USP\Drivers\Devices\24CXX;..\USP\Drivers\Components\IIC;..\USP\Drivers\Components\SPI;..\USP\Drivers\Components\DELAY;..\USP\Middlewares\Game\Football</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -778,7 +778,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Middlewares/Gmae/Snake</GroupName>
+          <GroupName>Middlewares/Game/Snake</GroupName>
           <Files>
             <File>
               <FileName>gluttonous_snake.cpp</FileName>
@@ -793,7 +793,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Middlewares/Gmae/Tetris</GroupName>
+          <GroupName>Middlewares/Game/Tetris</GroupName>
           <Files>
             <File>
               <FileName>tetris.cpp</FileName>
@@ -809,6 +809,16 @@
               <FileName>tetris_object.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\USP\Middlewares\Game\Tetris\tetris_object.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares/Game/Football</GroupName>
+          <Files>
+            <File>
+              <FileName>football.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\USP\Middlewares\Game\Football\football.cpp</FilePath>
             </File>
           </Files>
         </Group>

@@ -42,8 +42,8 @@
 #define TETRIS_ACC		13
 #define TETRIS_QUIT 	14	
 
-#define SPEED_SLOW 20
-#define SPEED_FAST 6
+#define SPEED_SLOW 100
+#define SPEED_FAST 30
 
 /* Private include -----------------------------------------------------------*/
 
@@ -65,10 +65,6 @@ typedef struct _Condition
 	int y;				 				//方块的纵坐标
 	uint8_t alive;			 	//0:失活 1:存活
 	
-//	&_Condition operator=()
-//	{
-//		
-//	}
 } Condition;	
 
 #ifdef __cplusplus

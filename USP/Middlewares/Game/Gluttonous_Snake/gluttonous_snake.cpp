@@ -68,17 +68,23 @@ void Gluttonous_Snake::Game_Map(void)
 	LCD_Clear(WHITE);
 	POINT_COLOR=BLACK;
 	LCD_DrawRectangle(1, 1, 180, 200);
-	LCD_DrawRectangle(2, 2, 179, 199);
+//	LCD_DrawRectangle(2, 2, 179, 199);
 	if(object.Get_Snake().size==2)
 	{
-	LCD_DrawLine(3,3,3,198);
-	LCD_DrawLine(178,3,178,198);//为了检测方便,加多两列
+		LCD_DrawLine(3,3,3,198);
+		LCD_DrawLine(178,3,178,198);//为了检测方便,加多两列
 	}
 	if(object.Get_Snake().size==3)
 	{
-	LCD_DrawLine(3,3,179,3);
-	LCD_Fill(3,3,5,199,BLACK);
-	LCD_Fill(177,3,178,199,BLACK);	
+		LCD_DrawLine(3,3,179,3);
+		LCD_Fill(3,3,5,199,BLACK);
+		LCD_Fill(177,3,178,199,BLACK);	
+	}
+	if(object.Get_Snake().size==6)
+	{
+		LCD_Fill(3,3,180,5,BLACK);
+		LCD_Fill(3,3,5,199,BLACK);
+		LCD_Fill(3,198,180,199,BLACK);
 	}
 	
 	//成绩打印框
@@ -86,9 +92,9 @@ void Gluttonous_Snake::Game_Map(void)
 	LCD_DrawRectangle(181, 2, 239,  99);
 	
 	//速度打印框
-	LCD_DrawRectangle(179, 99, 240,  200);
+	LCD_DrawRectangle(181, 99, 240,  200);
 	LCD_DrawRectangle(180, 100, 239,  199);
-	LCD_DrawRectangle(179, 199, 240,  320);
+	LCD_DrawRectangle(181, 199, 240,  320);
 	
 	//下一目标分数打印框
 	LCD_DrawRectangle(180, 200, 239,  319);
@@ -252,7 +258,7 @@ void Gluttonous_Snake::Game_Init(void)
 	srand(rand());
 	
 	// 加载动画
-	Beginning_Vedio();
+//	Beginning_Vedio();
 	
 	// 界面初始化
 	Map_Init();

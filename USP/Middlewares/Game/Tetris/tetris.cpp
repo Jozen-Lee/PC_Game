@@ -135,11 +135,13 @@ void Tetris::Progress(void)
 	// 更新游戏显示界面
 	Update_GameShow();	
 	
+	// 检测行消除
+	if(con_now.alive == 0) scores += Game_Score(map.Check_Map());	
+	
 	// 重置方块状态
 	if(con_now.alive == 0) Reset_Tetris();
 	
-	// 检测行消除
-	if(con_now.alive == 0) scores += Game_Score(map.Check_Map());
+
 	
 	// 加速检测
 	if(speed_flag) speed_flag --;
@@ -249,10 +251,10 @@ void Tetris::Update_Map(const Condition& con)
 //1:下落失败
 uint8_t Tetris::Go_Down(void)
 {
-	uint32_t count = 0;
-	count = (count + 1) % speed;
-	if(!count) 
-	{
+//	uint32_t count = 0;
+//	count = (count + 1) % speed;
+//	if(!count) 
+//	{
 		con_now.y += 8;
 		if(Judge_Bottom(con_now)) 
 		{
@@ -263,8 +265,8 @@ uint8_t Tetris::Go_Down(void)
 		{
 			return 0;
 		}
-	}
-	return 0;
+//	}
+//	return 0;
 }
 
 /**
@@ -434,8 +436,8 @@ void Tetris::Update_GameShow(void)
 	if(con_now.alive == 0) Draw_Tetris(con_next, 0, 1); 
 	else Draw_Tetris(con_next, 1, 1);
 	
-//	// 显示完后, 更新con_old
-//	con_old = con_now; 
+	// 显示完后, 更新con_old
+	con_old = con_now; 
 }
 
 

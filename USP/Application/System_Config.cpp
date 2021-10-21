@@ -93,11 +93,11 @@ void System_Tasks_Init(void)
 { 
   /* Syetem Service init --------------*/
 //  Service_Debug_Init();
-  Service_Devices_Init();
-  Service_Communication_Init();
+//  Service_Devices_Init();
+//  Service_Communication_Init();
 //	
 //  /* Applications Init ----------------*/
-	App_Interface_Init();
+//	App_Interface_Init();
 	App_Games_Init();
 
 }

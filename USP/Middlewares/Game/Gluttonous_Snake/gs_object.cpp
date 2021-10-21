@@ -203,7 +203,7 @@ void GS_Object::Snake_Init(void)
 {
 	// 蛇信息初始化
 	snake.node=3;
-	snake.size=3;
+	snake.size=6;
 	snake.speed=0;
 	snake.snake_x[0]=48;snake.snake_x[1]=snake.snake_x[0]-snake.size;snake.snake_x[2]=snake.snake_x[0]-2*snake.size;
 	snake.snake_y[0]=48;snake.snake_y[1]=snake.snake_y[0];snake.snake_y[2]=snake.snake_x[0]-2*snake.size;
@@ -270,6 +270,11 @@ uint8_t GS_Object::TouchWall_Check(void)
 	else if(snake.size==3)
 	{
 	if(snake.snake_x[0]<6||snake.snake_x[0]>174||snake.snake_y[0]<6||snake.snake_y[0]>198)
+		return 1;
+  }
+	else if(snake.size==6)
+	{
+	if(snake.snake_x[0]<6||snake.snake_x[0]>174||snake.snake_y[0]<6||snake.snake_y[0]>192)
 		return 1;
   }
 	return 0;

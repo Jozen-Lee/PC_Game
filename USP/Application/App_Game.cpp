@@ -22,6 +22,7 @@
 #include "Service_Devices.h"
 #include "gluttonous_snake.h"
 #include "tetris.h"
+#include "football.h"
 #include "ps2.h"
 #include "touch.h"
 /* Private define ------------------------------------------------------------*/
@@ -44,6 +45,10 @@ TaskHandle_t TetrisOver_Handle;
 TaskHandle_t TetrisCtrl_Handle;
 //TaskHandle_t DeviceTouch_Handle;
 
+// 双人足球
+Football football;
+TaskHandle_t FootballGame_Handle;
+
 /* Private function declarations ---------------------------------------------*/
 
 // 贪吃蛇
@@ -58,6 +63,9 @@ void Game_Tetris(void *arg);
 void Tetris_Progress(void *arg);
 void Tetris_Ctrl(void *arg);
 void Tetris_Over(void *arg);
+
+// 双人足球
+void Game_Football(void *arg);
 
 /* Exported devices ----------------------------------------------------------*/
 /* Motor & ESC & Other actuators*/
@@ -76,7 +84,7 @@ void Tetris_Over(void *arg);
 void App_Games_Init(void)
 {
 	// 贪吃蛇
-	xTaskCreate(Game_Snake,							"Game.Snake", 				Normal_Stack_Size,    NULL, PriorityHigh, 			 &SnakeGame_Handle);
+	xTaskCreate(Game_Snake,							"Game.Snake", 				Large_Stack_Size,    	NULL, PriorityHigh, 			 &SnakeGame_Handle);
 	xTaskCreate(Snake_Food,							"Snake.Food", 				Small_Stack_Size,     NULL, PriorityHigh, 			 &SnakeFood_Handle);
 	xTaskCreate(Snake_Sport,						"Snake.Sport", 				Small_Stack_Size,     NULL, PriorityHigh, 			 &SnakeSport_Handle);
 	xTaskCreate(Snake_Over,							"Snake.Over", 				Small_Stack_Size,     NULL, PriorityHigh, 			 &SnakeOver_Handle);	
@@ -87,6 +95,9 @@ void App_Games_Init(void)
 	xTaskCreate(Tetris_Progress,				"Game.Progress", 			Normal_Stack_Size,     NULL, PriorityHigh, 			 &TetrisProgress_Handle);
 	xTaskCreate(Tetris_Over,						"Game.Over", 					Normal_Stack_Size,     NULL, PriorityHigh, 			 &TetrisOver_Handle);
 	xTaskCreate(Tetris_Ctrl,						"Game.Ctrl", 					Normal_Stack_Size,     NULL, PriorityHigh, 			 &TetrisCtrl_Handle);
+	
+	// 双人足球
+	xTaskCreate(Game_Football,					"Game.Football", 			Large_Stack_Size,     NULL, PriorityHigh, 			 &FootballGame_Handle);
 
 	
 	// 任务全挂起
@@ -101,7 +112,7 @@ void App_Games_Init(void)
 	vTaskSuspend(TetrisCtrl_Handle);
 }
 
-/* ----------------------------------------------- 贪吃蛇 -------------------------------------------------------------------------*/
+/* =============================================== 贪吃蛇 =============================================== */
 /**
  *@brief 贪吃蛇控制任务
  */ 
@@ -311,7 +322,7 @@ void Snake_Over(void *arg)
 }
 
 
-/* ---------------------------------------------- 俄罗斯方块 ------------------------------------------------------------ */
+/* =============================================== 俄罗斯方块 =============================================== */
 
 /**
  *@brief 俄罗斯方块说明界面的触屏函数
@@ -461,13 +472,11 @@ void Tetris_Progress(void *arg)
   /* Cache for Task */
   /* Pre-Load for task */
 	
-	// 刷新时间间隔
-	uint8_t Update_ms = 5;
   /* Infinite loop */
   for(;;)
   {
 		tetris.Progress();
-		vTaskDelay(Update_ms);	
+		vTaskDelay(tetris.Get_Speed());	
 	}	
 }
 
@@ -505,6 +514,25 @@ void Tetris_Over(void *arg)
 		}
 		vTaskDelayUntil(&xLastWakeTime_t, _xTicksToWait);	
 	}	
+}
+
+/* =============================================== 双人足球 =============================================== */
+
+void Game_Football(void *arg)
+{
+  /* Cache for Task */
+  TickType_t xLastWakeTime_t = xTaskGetTickCount();
+	TickType_t _xTicksToWait = pdMS_TO_TICKS(50);
+	
+  /* Pre-Load for task */
+	LCD_Display_Dir(1);
+	football.Game_Init();
+	
+  /* Infinite loop */
+  for(;;)
+  {
+		vTaskDelayUntil(&xLastWakeTime_t, _xTicksToWait);	
+	}		
 }
 
 
