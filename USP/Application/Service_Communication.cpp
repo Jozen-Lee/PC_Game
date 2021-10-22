@@ -16,6 +16,7 @@
 **/
 /* Includes ------------------------------------------------------------------*/
 #include "Service_Communication.h"
+#include "App_Game.h"
 
 /* Private define ------------------------------------------------------------*/
 void Task_UsartRecieve(void *arg);
@@ -57,7 +58,9 @@ void Task_UsartRecieve(void *arg)
     {
 			switch(Usart_RxCOB.port_num)
 			{
-				case 1: xQueueSend(Ctrl_Port, Usart_RxCOB.address, 0);
+				case 1: 
+					if(CTRL_MODE == SINGLE_MODE) xQueueSend(Ctrl_Port, Usart_RxCOB.address, 0);
+					else if(CTRL_MODE == DOUBLE_MODE) xQueueSend(Role1_Port, Usart_RxCOB.address, 0);
 					break;
 				default: break;
 			}

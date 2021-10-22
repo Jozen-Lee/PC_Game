@@ -42,7 +42,7 @@
 #define BOARD_DHEIGTH	12
 
 // 足球参数
-#define BALL_SIZE 5
+#define BALL_SIZE 7
 
 // 游戏边界
 #define LIMIT_UP 20
@@ -93,6 +93,23 @@ public:
 	void GameOver_Interface(void);									// 游戏结束界面
 	void GameStart_Interface(void);									// 游戏开始界面
 	void Handle_Quit(void){over_flag = 3;}					// 手动退出
+	void Set_Role_Location(int x, int y)
+	{
+		if(y > LIMIT_UP + BOARD_DHEIGTH && y < LIMIT_DOWN - BOARD_DHEIGTH)
+		{
+			if(x > LIMIT_LEFT + BOARD_DWIDTH && x < LIMIT_MID - BOARD_DWIDTH)
+			{
+				Player_XMove(1,x-role1.loc[0]);
+				Player_YMove(1,y-role1.loc[1]);
+			}
+			else if(x > LIMIT_MID + BOARD_DWIDTH && x < LIMIT_RIGHT - BOARD_DWIDTH)
+			{
+				Player_XMove(2,x-role2.loc[0]);
+				Player_YMove(2,y-role2.loc[1]);				
+			}
+		}
+		
+	}
 		
 	// 判断游戏是否结束 0 继续 1 结束
 	uint8_t If_Over(void){return over_flag;}
@@ -161,7 +178,6 @@ private:
 	/*====================================变量=======================================*/
 	ball b; // 足球
 	player role1,role2;	// 玩家
-	uint8_t score1, score2;
 	
 	// 玩家的运动距离
 	int move1[2] = {0, 0};

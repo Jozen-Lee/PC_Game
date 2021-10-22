@@ -44,8 +44,8 @@ void Football::GameStart_Interface(void)
 {
 	LCD_Clear(WHITE);
 	POINT_COLOR = BLUE;
-	Show_Str_Mid(40,80,(uint8_t*)"欢迎进入", 24,240);
-	Show_Str_Mid(40,140,(uint8_t*)"双人足球", 24,240);
+	Show_Str_Mid(40,60,(uint8_t*)"欢迎进入", 24,240);
+	Show_Str_Mid(40,120,(uint8_t*)"双人足球", 32,240);
 	POINT_COLOR = RED;
 	Show_Str_Mid(40,180,(uint8_t*)"GoGoGo!!", 16, 240);	
 }
@@ -69,6 +69,7 @@ void Football::GameOver_Interface(void)
 		HAL_Delay(2000);
 	}
 	POINT_COLOR=WHITE;
+	LCD_Clear(BLACK);
 	Show_Str_Mid(40,100,(uint8_t*)"重新开始",24,240);	
 	Show_Str_Mid(40,180,(uint8_t*)"返回",24,240);			
 }
@@ -119,6 +120,8 @@ void Football::Game_Update(void)
 		// 球更新
 		if(!b.flag)
 		{
+			// 更新分数
+			Update_Score();
 			Ball_Init(b);
 		}
 		
@@ -183,11 +186,12 @@ void Football::Draw_BackGround(void)
  */ 
 void Football::Update_Score(void)
 {
+	POINT_COLOR = BLACK;
 	// 玩家一
-	LCD_ShowNum(144,2,score1,1,16);
+	LCD_ShowNum(144,2,role1.score,1,16);
 	
 	// 玩家二
-	LCD_ShowNum(168,2,score2,1,16);
+	LCD_ShowNum(168,2,role2.score,1,16);
 }
 
 /**
@@ -259,14 +263,17 @@ uint8_t Football::Collision_Detect(player& role, int dis, uint8_t x_y)
 	if(!x_y) 
 	{
 		loc_new = role.loc[0] + dis;
-		if(role.index == 1 && (loc_new - BOARD_DWIDTH < LIMIT_LEFT || loc_new + BOARD_DWIDTH > LIMIT_MID)) return 1;
-		else if(role.index == 2 && (loc_new - BOARD_DWIDTH < LIMIT_MID || loc_new + BOARD_DWIDTH > LIMIT_RIGHT)) return 1;
+		if(role.index == 1 && (loc_new - BOARD_DWIDTH <= LIMIT_LEFT || loc_new + BOARD_DWIDTH >= LIMIT_MID)) return 1;
+		else if(role.index == 2 && (loc_new - BOARD_DWIDTH <= LIMIT_MID || loc_new + BOARD_DWIDTH >= LIMIT_RIGHT)) return 1;
 		else return 0;
 	}
 	else 
 	{
 		loc_new = role.loc[1] + dis;
-		if(loc_new - BOARD_DHEIGTH < LIMIT_UP || loc_new + BOARD_DHEIGTH > LIMIT_DOWN) return 1;
+		if(loc_new - BOARD_DHEIGTH <= LIMIT_UP || loc_new + BOARD_DHEIGTH >= LIMIT_DOWN) 
+		{
+			return 1;
+		}
 		else return 0;
 	}
 }
@@ -327,11 +334,20 @@ void Football::Player_Move(player& role)
 	
 	// 位移微分
 	_dx = dx > 0 ? 1 : (-1);
-	_dy = dy > 0 ? 1 : (-1);
 	for(int i = 0; i < abs(dx); i ++)
 	{
-		if(!Collision_Detect(role,_dx,0)) role.loc[0] += _dx;
-		if(!Collision_Detect(role,_dy,1)) role.loc[1] += _dy;
+		if(!Collision_Detect(role,_dx,0)) 
+		{
+			role.loc[0] += _dx;
+		}
+	}	
+	_dy = dy > 0 ? 1 : (-1);
+	for(int i = 0; i < abs(dy); i ++)
+	{
+		if(!Collision_Detect(role,_dy,1)) 
+		{
+			role.loc[1] += _dy;
+		}
 	}	
 }
 
@@ -343,16 +359,16 @@ uint8_t Football::Check_Scored(ball& b)
 {
 	if(b.loc[1] > DOOR_UP && b.loc[1] < DOOR_DOWN)
 	{
-		if(b.loc[0] - b.radius == LIMIT_LEFT) 
-		{
-			b.flag = 0;
-			role1.score += 1;
-			return 1;
-		}			
-		else if(b.loc[0] + b.radius == LIMIT_RIGHT)
+		if(b.loc[0] - b.radius == LIMIT_LEFT+1) 
 		{
 			b.flag = 0;
 			role2.score += 1;
+			return 1;
+		}			
+		else if(b.loc[0] + b.radius == LIMIT_RIGHT-1)
+		{
+			b.flag = 0;
+			role1.score += 1;
 			return 2;
 		}
 		else return 0;

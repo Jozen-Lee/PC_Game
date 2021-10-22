@@ -92,7 +92,8 @@ void IF_Start(void *arg)
 			touch_func = NULL;
 			if(res == 1) 
 			{
-				vTaskResume(GamesIF_Handle);
+//				vTaskResume(GamesIF_Handle);
+				vTaskResume(FootballGame_Handle);
 				vTaskSuspend(NULL);
 			}
 		}

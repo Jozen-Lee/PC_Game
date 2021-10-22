@@ -17,6 +17,7 @@
  */
 /* Includes ------------------------------------------------------------------*/
 #include "Service_Devices.h"
+#include "App_Game.h"
 #include "ps2.h"
 /* Private define ------------------------------------------------------------*/
 
@@ -59,18 +60,29 @@ uint8_t rx,ry,lx,ly;
 void Device_PS2(void *arg)
 {
   /* Cache for Task */
-
+	QueueHandle_t port;
   /* Pre-Load for task */
   uint8_t dir;
 	uint8_t trans[3] = {1, 2, 3};
   /* Infinite loop */
   for(;;)
   {
+		// 单双人模式信号放入不同队列
+		if(CTRL_MODE == SINGLE_MODE) port = Ctrl_Port;
+		else port = Role2_Port;
 		ps2.UpdateData();
-		if(ps2.GetKeyData(KEY_PAD_UP) == PS2_PRESS)  		{ dir = DIR_UP; 	xQueueSend(Ctrl_Port, &dir, 0);}
-		if(ps2.GetKeyData(KEY_PAD_DOWN) == PS2_PRESS)  	{ dir = DIR_DOWN; xQueueSend(Ctrl_Port, &dir, 0);}
-		if(ps2.GetKeyData(KEY_PAD_LEFT) == PS2_PRESS )  	{ dir = DIR_LEFT; xQueueSend(Ctrl_Port, &dir, 0);}
-		if(ps2.GetKeyData(KEY_PAD_RIGHT) == PS2_PRESS)  { dir = DIR_RIGHT; xQueueSend(Ctrl_Port, &dir, 0);}
+		if(ps2.GetKeyData(KEY_PAD_UP) == PS2_PRESS)  	
+		{ 
+			dir = DIR_UP; 	
+			xQueueSend(port, &dir, 0);
+		}
+		if(ps2.GetKeyData(KEY_PAD_DOWN) == PS2_PRESS)  	
+		{ 
+			dir = DIR_DOWN; 
+			xQueueSend(port, &dir, 0);
+		}
+		if(ps2.GetKeyData(KEY_PAD_LEFT) == PS2_PRESS )  	{ dir = DIR_LEFT; xQueueSend(port, &dir, 0);}
+		if(ps2.GetKeyData(KEY_PAD_RIGHT) == PS2_PRESS)  { dir = DIR_RIGHT; xQueueSend(port, &dir, 0);}
 		rx = ps2.GetRodData(ROD_RX);
 		ry = ps2.GetRodData(ROD_RY);
 		lx = ps2.GetRodData(ROD_LX);

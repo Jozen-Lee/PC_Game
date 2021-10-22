@@ -19,7 +19,8 @@
 /* Exported variables --------------------------------------------------------*/
 extern TaskHandle_t SnakeGame_Handle;
 extern TaskHandle_t TetrisGame_Handle;
-
+extern TaskHandle_t FootballGame_Handle;
+extern uint8_t CTRL_MODE;
 #ifdef  __cplusplus
 
 #endif
