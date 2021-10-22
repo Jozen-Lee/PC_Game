@@ -62,6 +62,8 @@ void System_Resource_Init(void)
   USART_RxPort    = xQueueCreate(4,sizeof(USART_COB));
 	Action_Port 		= xQueueCreate(1,1);
 	Ctrl_Port 			= xQueueCreate(1,1);
+	Role1_Port 			= xQueueCreate(2,1);
+	Role2_Port 			= xQueueCreate(2,1);
 	
   /* Other resources Init -------------*/
 	// ×Ö¿â³õÊ¼»¯

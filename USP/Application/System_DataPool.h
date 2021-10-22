@@ -46,6 +46,8 @@ extern QueueHandle_t  USART_RxPort;
 extern QueueHandle_t  USART_TxPort;
 extern QueueHandle_t	Action_Port;
 extern QueueHandle_t	Ctrl_Port;
+extern QueueHandle_t 	Role1_Port;
+extern QueueHandle_t 	Role2_Port;
 
 /* Mutexes */
 /* Notifications */
@@ -62,6 +64,9 @@ extern uint8_t Uart2_Rx_Buff[USART2_RX_BUFFER_SIZE];
 #define DIR_LEFT	LEFT
 #define GAME_OVER 5
 #define GAME_CONTINUE 6
+
+#define SINGLE_MODE 1 // 单人模式
+#define DOUBLE_MODE 2	// 双人模式
 
 #endif
 /************************ COPYRIGHT(C) SCUT-ROBOTLAB **************************/

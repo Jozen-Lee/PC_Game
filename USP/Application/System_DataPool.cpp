@@ -15,6 +15,8 @@ QueueHandle_t USART_RxPort;
 QueueHandle_t USART_TxPort;
 QueueHandle_t	Action_Port;
 QueueHandle_t	Ctrl_Port;
+QueueHandle_t Role1_Port;
+QueueHandle_t Role2_Port;
 
 /* Semaphores */
 /* Mutexes */

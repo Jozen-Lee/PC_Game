@@ -43,11 +43,14 @@ TaskHandle_t TetrisGame_Handle;
 TaskHandle_t TetrisProgress_Handle;
 TaskHandle_t TetrisOver_Handle;
 TaskHandle_t TetrisCtrl_Handle;
-//TaskHandle_t DeviceTouch_Handle;
 
 // 双人足球
 Football football;
 TaskHandle_t FootballGame_Handle;
+TaskHandle_t Role1Ctrl_Handle;
+TaskHandle_t Role2Ctrl_Handle;
+TaskHandle_t FootballProgress_Handle;
+TaskHandle_t FootballOver_Handle;
 
 /* Private function declarations ---------------------------------------------*/
 
@@ -66,11 +69,15 @@ void Tetris_Over(void *arg);
 
 // 双人足球
 void Game_Football(void *arg);
+void Role1_Ctrl(void *arg);
+void Role2_Ctrl(void *arg);
+void Football_Progress(void *arg);
+void Football_Over(void *arg);
 
 /* Exported devices ----------------------------------------------------------*/
 /* Motor & ESC & Other actuators*/
 /* Remote control */
-
+uint8_t CTRL_MODE = SINGLE_MODE;
 /* IMU & NUC & Other sensors */
 
 /* Other boards */
@@ -91,14 +98,17 @@ void App_Games_Init(void)
 	xTaskCreate(Snake_Ctrl,							"Snake.Ctrl", 				Small_Stack_Size,     NULL, PriorityHigh, 			 &SnakeCtrl_Handle);
 	
 	// 俄罗斯方块
-	xTaskCreate(Game_Tetris,						"Game.Tetris", 				Normal_Stack_Size,     NULL, PriorityHigh, 			 &TetrisGame_Handle);
-	xTaskCreate(Tetris_Progress,				"Game.Progress", 			Normal_Stack_Size,     NULL, PriorityHigh, 			 &TetrisProgress_Handle);
-	xTaskCreate(Tetris_Over,						"Game.Over", 					Normal_Stack_Size,     NULL, PriorityHigh, 			 &TetrisOver_Handle);
-	xTaskCreate(Tetris_Ctrl,						"Game.Ctrl", 					Normal_Stack_Size,     NULL, PriorityHigh, 			 &TetrisCtrl_Handle);
+	xTaskCreate(Game_Tetris,						"Game.Tetris", 				Normal_Stack_Size,    NULL, PriorityHigh, 			 &TetrisGame_Handle);
+	xTaskCreate(Tetris_Progress,				"Tetris.Progress", 		Normal_Stack_Size,    NULL, PriorityHigh, 			 &TetrisProgress_Handle);
+	xTaskCreate(Tetris_Over,						"Tetris.Over", 				Normal_Stack_Size,    NULL, PriorityHigh, 			 &TetrisOver_Handle);
+	xTaskCreate(Tetris_Ctrl,						"Tetris.Ctrl", 				Normal_Stack_Size,    NULL, PriorityHigh, 			 &TetrisCtrl_Handle);
 	
 	// 双人足球
 	xTaskCreate(Game_Football,					"Game.Football", 			Large_Stack_Size,     NULL, PriorityHigh, 			 &FootballGame_Handle);
-
+	xTaskCreate(Role1_Ctrl,							"Football.Role1", 		Normal_Stack_Size,    NULL, PriorityHigh, 			 &Role1Ctrl_Handle);
+	xTaskCreate(Role2_Ctrl,							"Football.Role2", 		Normal_Stack_Size,    NULL, PriorityHigh, 			 &Role2Ctrl_Handle);
+	xTaskCreate(Football_Over,					"Football.Over", 			Normal_Stack_Size,    NULL, PriorityHigh, 			 &FootballOver_Handle);
+	xTaskCreate(Football_Progress,			"Football.Progress", 	Normal_Stack_Size,    NULL, PriorityHigh, 			 &FootballProgress_Handle);
 	
 	// 任务全挂起
 	vTaskSuspend(SnakeGame_Handle); 
@@ -222,6 +232,9 @@ void Game_Snake(void *arg)
   /* Infinite loop */
   for(;;)
   {
+		// 单人模式
+		CTRL_MODE = SINGLE_MODE;
+		
 		// 说明界面
 		snake.Game_Introduction();
 		HAL_Delay(500);
@@ -409,6 +422,9 @@ void Game_Tetris(void *arg)
   /* Infinite loop */
   for(;;)
   {
+		// 单人模式
+		CTRL_MODE = SINGLE_MODE;
+		
 		// 说明界面
 		tetris.map.Inf_Show();
 		HAL_Delay(500);
@@ -518,23 +534,223 @@ void Tetris_Over(void *arg)
 
 /* =============================================== 双人足球 =============================================== */
 
+/**
+ *@brief 双人足球说明界面的触屏函数
+ */ 
+uint8_t Football_ID_Touch(void)
+{
+	// 扫描触屏按键
+	tp_dev.scan(0); 
+	if(tp_dev.sta&TP_PRES_DOWN)
+	{
+		 if(tp_dev.x[0]>(40)&&tp_dev.x[0]<(240)&&tp_dev.y[0]>(160)&&tp_dev.y[0]<(220))
+		 {
+				return 1;
+		 }
+		 else return 0;
+	}
+	else return 0;
+}
+
+/**
+ *@brief 双人足球结束界面的触屏函数
+ */ 
+uint8_t FootballOver_Touch(void)
+{
+	// 扫描触屏按键
+	tp_dev.scan(0); 
+	if(tp_dev.sta&TP_PRES_DOWN)
+	{
+		 // 重新开始
+		 if(tp_dev.x[0]>40&&tp_dev.x[0]<200&&tp_dev.y[0]>80&&tp_dev.y[0]<110)
+		 {
+				return 1;
+		 }
+		 // 返回
+		 else if(tp_dev.x[0]>40&&tp_dev.x[0]<200&&tp_dev.y[0]>200&&tp_dev.y[0]<230)
+		 {
+			 return 2;
+		 }
+		 else return 0;
+	}
+	else return 0;
+}
+
+/**
+ *@brief 贪吃蛇游戏运行界面的触屏函数
+ */ 
+uint8_t Football_Processing_Touch(void)
+{ 
+	tp_dev.scan(0); 
+	if(tp_dev.sta&TP_PRES_DOWN)	// 触摸屏被按下
+	{		
+		if(tp_dev.x[0]>140&&tp_dev.x[0]<180&&tp_dev.y[0]>0&&tp_dev.y[0]<20)
+		{	
+			football.Handle_Quit();
+		} 		
+	}
+	return 0;
+}
+
+/**
+ *@brief 双人足球游戏的主任务
+ */ 
 void Game_Football(void *arg)
 {
   /* Cache for Task */
-  TickType_t xLastWakeTime_t = xTaskGetTickCount();
-	TickType_t _xTicksToWait = pdMS_TO_TICKS(50);
 	
   /* Pre-Load for task */
-	LCD_Display_Dir(1);
-	football.Game_Init();
+	uint8_t res;
 	
   /* Infinite loop */
   for(;;)
   {
-		vTaskDelayUntil(&xLastWakeTime_t, _xTicksToWait);	
-	}		
+		// 双人模式
+		CTRL_MODE = DOUBLE_MODE;
+		
+		// 说明界面
+		tetris.map.Inf_Show();
+		HAL_Delay(500);
+		touch_func = Football_ID_Touch;
+		
+		// 等待
+		xQueueReceive(Action_Port,&res,portMAX_DELAY);
+		
+		// 游戏初始化
+		LCD_Display_Dir(1);	// 切换横屏
+		touch_func = Football_Processing_Touch;
+		football.Game_Init();
+		vTaskResume(Role1Ctrl_Handle);
+		vTaskResume(Role2Ctrl_Handle);
+		vTaskResume(FootballOver_Handle);
+		vTaskResume(FootballProgress_Handle);
+		
+		// 等待游戏结束
+		if(xQueueReceive(Action_Port,&res,portMAX_DELAY) == pdPASS)
+		{
+			if(res == GAME_OVER) 
+			{
+				vTaskSuspend(Role1Ctrl_Handle);
+				vTaskSuspend(Role2Ctrl_Handle);
+				vTaskSuspend(FootballProgress_Handle);
+				vTaskSuspend(NULL);
+			}
+		}
+		vTaskDelay(100);	
+	}
 }
 
+/**
+ *@brief 双人足球游戏的控制任务
+ */ 
+void Role1_Ctrl(void *arg)
+{
+  /* Cache for Task */
+	
+  /* Pre-Load for task */
+	uint8_t cmd;
+	const uint8_t role = 1;
+	int vel = 3;
+  /* Infinite loop */
+  for(;;)
+  {
+		if(xQueueReceive(Role1_Port,&cmd,portMAX_DELAY) == pdPASS)
+		{
+			switch(cmd)
+			{
+				case DIR_UP: 		football.Player_YMove(role, -vel); 		break;
+				case DIR_DOWN: 	football.Player_YMove(role, vel); 		break; 
+				case DIR_LEFT: 	football.Player_XMove(role, -vel); 		break;
+				case DIR_RIGHT: football.Player_XMove(role, vel); 		break;
+				default: break;
+			}
+		}
+	}	
+}
+
+/**
+ *@brief 双人足球游戏的控制任务
+ */ 
+void Role2_Ctrl(void *arg)
+{
+  /* Cache for Task */
+	
+  /* Pre-Load for task */
+	uint8_t cmd;
+	const uint8_t role = 2;
+	int vel = 3;
+  /* Infinite loop */
+  for(;;)
+  {
+		if(xQueueReceive(Role2_Port,&cmd,portMAX_DELAY) == pdPASS)
+		{
+			switch(cmd)
+			{
+				case DIR_UP: 		football.Player_YMove(role, -vel); 		break;
+				case DIR_DOWN: 	football.Player_YMove(role, vel); 		break; 
+				case DIR_LEFT: 	football.Player_XMove(role, -vel); 		break;
+				case DIR_RIGHT: football.Player_XMove(role, vel); 		break;
+				default: break;
+			}
+		}
+	}	
+}
+
+/**
+ *@brief 双人足球界面刷新任务
+ */ 
+void Football_Progress(void *arg)
+{
+  /* Cache for Task */
+	TickType_t xLastWakeTime_t = xTaskGetTickCount();
+	TickType_t _xTicksToWait = pdMS_TO_TICKS(50);
+	
+  /* Pre-Load for task */
+
+  /* Infinite loop */
+  for(;;)
+  {
+		vTaskDelay(_xTicksToWait);
+		football.Game_Update();
+	}	
+}
+
+/**
+ *@brief 双人足球的游戏结束任务
+ */ 
+void Football_Over(void *arg)
+{
+  /* Cache for Task */
+  TickType_t xLastWakeTime_t = xTaskGetTickCount();
+	TickType_t _xTicksToWait = pdMS_TO_TICKS(50);
+  /* Pre-Load for task */
+	uint8_t over;
+  /* Infinite loop */
+  for(;;)
+  {
+		if(football.If_Over()) 
+		{
+			// 终止游戏
+			over = GAME_OVER;
+			xQueueSend(Action_Port, &over, 0);
+			vTaskDelay(200);
+			
+			// 游戏结束界面
+			football.GameOver_Interface();
+			HAL_Delay(500);
+			touch_func = FootballOver_Touch;
+			if(xQueueReceive(Action_Port,&over,portMAX_DELAY) == pdPASS)
+			{
+				touch_func = NULL;
+				if(over == 1) vTaskResume(FootballGame_Handle);
+				else if(over == 2) vTaskResume(GamesIF_Handle);
+				LCD_Display_Dir(0);	// 恢复竖屏
+				vTaskSuspend(NULL);
+			}
+		}
+		vTaskDelayUntil(&xLastWakeTime_t, _xTicksToWait);	
+	}	
+}
 
 /* User Code End Here ---------------------------------*/
 
